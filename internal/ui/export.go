@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/mehran9675/giode"
+	"github.com/xmhrnx/giode"
 	"github.com/mehran9675/pocket-agent/internal/llm"
 	"github.com/mehran9675/pocket-agent/internal/store"
 )

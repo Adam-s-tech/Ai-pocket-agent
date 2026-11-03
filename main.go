@@ -13,7 +13,7 @@ import (
 	"gioui.org/app"
 	_ "gioui.org/app/permission/microphone" // dictation on Android
 
-	"github.com/mehran9675/giode"
+	"github.com/xmhrnx/giode"
 
 	"github.com/mehran9675/pocket-agent/internal/store"
 	"github.com/mehran9675/pocket-agent/internal/ui"
@@ -68,6 +68,12 @@ func main() {
 		OnShutdown: func() {
 			if pa != nil {
 				pa.SaveAll()
+			}
+		},
+		// Text, links and files shared from other apps start a new chat.
+		OnShareReceived: func(s giode.SharedContent) {
+			if pa != nil {
+				pa.ShareReceived(s)
 			}
 		},
 		OnSystemThemeChange: func(dark bool) {

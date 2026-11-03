@@ -1,6 +1,6 @@
 # Building Pocket Agent
 
-Pocket Agent is a Go program packaged with the [giode CLI](https://github.com/Mehran9675/giode-cli),
+Pocket Agent is a Go program packaged with the [giode CLI](https://github.com/xmhrnx/giode-cli),
 which builds on Gio's gogio and adds what it can't do: Android manifest entries and iOS
 Info.plist keys. `giode.toml` holds the app name, ID, icon, permissions (microphone for
 dictation, the foreground service that lets agent runs finish in the background) and iOS
@@ -12,7 +12,7 @@ and iPad, adapting through the app's responsive layouts.
 | | |
 | --- | --- |
 | Go | 1.26.6 or later |
-| giode CLI | `go install github.com/mehran9675/giode-cli/cmd/giode@latest`; `giode doctor` checks the rest |
+| giode CLI | `go install github.com/xmhrnx/giode-cli/cmd/giode@latest`; `giode doctor` checks the rest |
 | Android | Android SDK (platform 35, build-tools), NDK r27+, JDK 17+. Set `ANDROID_HOME` (and `ANDROID_NDK_ROOT` if the NDK lives elsewhere). |
 | iOS / iPadOS | macOS with Xcode 15+, an Apple developer account and a provisioning profile for the app ID. |
 | Desktop (development) | Linux: Wayland/X11/EGL/Vulkan headers ([Gio install guide](https://gioui.org/doc/install)). macOS and Windows need nothing extra. |

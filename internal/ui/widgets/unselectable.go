@@ -2,7 +2,7 @@ package widgets
 
 import (
 	"gioui.org/layout"
-	"github.com/mehran9675/giode/components/kit"
+	"github.com/xmhrnx/giode/components/kit"
 )
 
 // Unselectable keeps the text in el out of an enclosing SelectionArea:

@@ -5,7 +5,7 @@ import (
 	"errors"
 	"io"
 
-	"github.com/mehran9675/giode"
+	"github.com/xmhrnx/giode"
 )
 
 func (a *App) importModel() {

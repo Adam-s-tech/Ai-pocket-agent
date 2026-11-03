@@ -1,7 +1,7 @@
 package widgets
 
 import (
-	"github.com/mehran9675/giode"
+	"github.com/xmhrnx/giode"
 )
 
 // IconButton is a borderless icon button with a hover/press plate.

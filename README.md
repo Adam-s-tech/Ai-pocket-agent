@@ -3,7 +3,7 @@
 A private AI workspace for **Android, iPhone and iPad**: chat with models running on the
 device or in the cloud, hand multi-step tasks to agents, and run deep research that reads
 dozens of sources and writes a cited report. Written in Go with
-[Giode](https://github.com/mehran9675/giode) - one codebase, native rendering, no webview.
+[Giode](https://github.com/xmhrnx/giode) - one codebase, native rendering, no webview.
 
 <p>
 <img src="docs/screenshots/phone-home.png" width="200" alt="New chat on a phone">
@@ -112,7 +112,7 @@ or network. Remove `-tags devmock` (`make run`) for the real app.
 ## Building for phones and tablets
 
 ```sh
-go install github.com/mehran9675/giode-cli/cmd/giode@latest   # packaging; see giode.toml
+go install github.com/xmhrnx/giode-cli/cmd/giode@latest   # packaging; see giode.toml
 make android                 # build/pocket-agent.apk (arm64, Android 9+)
 make engine-android          # build/engine/libpocketllama-android-*.so, the downloadable engine
 make llama-ios && make ios LLAMA=1 SIGNKEY=<profile>   # universal iPhone + iPad app, engine built in

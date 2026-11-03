@@ -3,8 +3,8 @@ package ui
 import (
 	"strings"
 
-	"github.com/mehran9675/giode"
-	"github.com/mehran9675/giode/i18n"
+	"github.com/xmhrnx/giode"
+	"github.com/xmhrnx/giode/i18n"
 	"github.com/mehran9675/pocket-agent/internal/ui/theme"
 	"github.com/mehran9675/pocket-agent/internal/ui/widgets"
 )

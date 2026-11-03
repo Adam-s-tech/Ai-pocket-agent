@@ -1,7 +1,7 @@
 package theme
 
 import (
-	"github.com/mehran9675/giode"
+	"github.com/xmhrnx/giode"
 	"github.com/mehran9675/pocket-agent/assets"
 )
 

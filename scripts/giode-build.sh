@@ -8,6 +8,8 @@
 #   APPID=...        app ID, when signing needs a different one
 #   KEYSTORE=...     Android release keystore (password in GIODE_KEYSTORE_PASS);
 #                    builds with -release when set
+#   SHARE_PROFILE=.. iOS share extension's provisioning profile; signed iOS
+#                    builds without one leave out the share target
 #
 # In GitHub Actions a failed build's output is also reported as an error
 # annotation, readable on the run's summary.
@@ -49,6 +51,11 @@ if os.environ.get("TAGS"):
     put("app", "tags", q(os.environ["TAGS"]))
 if os.environ.get("PROFILE"):
     put("ios", "profile", q(os.path.abspath(os.environ["PROFILE"])))
+    # The share extension is signed with its own profile.
+    if os.environ.get("SHARE_PROFILE"):
+        put("ios", "share_profile", q(os.path.abspath(os.environ["SHARE_PROFILE"])))
+    else:
+        put("app", "share_target", "false")
 if os.environ.get("KEYSTORE"):
     put("android", "keystore", q(os.path.abspath(os.environ["KEYSTORE"])))
 open(path, "w").write("\n".join(lines))

@@ -1,8 +1,8 @@
 package widgets
 
 import (
-	"github.com/mehran9675/giode"
-	pr "github.com/mehran9675/giode/styles/properties"
+	"github.com/xmhrnx/giode"
+	pr "github.com/xmhrnx/giode/styles/properties"
 )
 
 func Spacer() El { return giode.Box(St{FlexGrow: 1}) }

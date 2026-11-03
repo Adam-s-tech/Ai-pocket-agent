@@ -1,6 +1,6 @@
 package theme
 
-import "github.com/mehran9675/giode"
+import "github.com/xmhrnx/giode"
 
 // Tint is color mixed into the surface color, opaque: soft badge and
 // icon backgrounds. (Translucent fills look much stronger in Gio than

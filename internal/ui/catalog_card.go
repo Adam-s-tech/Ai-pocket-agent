@@ -3,7 +3,7 @@ package ui
 import (
 	"fmt"
 
-	"github.com/mehran9675/giode"
+	"github.com/xmhrnx/giode"
 	"github.com/mehran9675/pocket-agent/internal/local"
 	"github.com/mehran9675/pocket-agent/internal/tools"
 	"github.com/mehran9675/pocket-agent/internal/ui/theme"

@@ -1,7 +1,7 @@
 # Pocket Agent build targets. See docs/building.md.
 
 # App name, ID, icon, permissions and Info.plist texts are in giode.toml; packaging uses the
-# giode CLI (go install github.com/mehran9675/giode-cli/cmd/giode@latest).
+# giode CLI (go install github.com/xmhrnx/giode-cli/cmd/giode@latest).
 VERSION ?= 1.0.0.1
 OUT     := build
 export GIODE ?= giode
@@ -39,9 +39,9 @@ android:        ## APK for arm64 phones and tablets (Android 9+); SIGNKEY/SIGNPA
 	VERSION=$(VERSION) TAGS="$(TAGS)" KEYSTORE=$(SIGNKEY) GIODE_KEYSTORE_PASS="$(SIGNPASS)" \
 		scripts/giode-build.sh -o $(OUT)/pocket-agent.apk android
 
-ios:            ## universal iPhone + iPad app; SIGNKEY = provisioning profile
+ios:            ## universal iPhone + iPad app; SIGNKEY = provisioning profile, SHAREKEY = the share extension's
 	mkdir -p $(OUT)
-	VERSION=$(VERSION) TAGS=$(TAGS) PROFILE=$(SIGNKEY) APPID=$(APPID) \
+	VERSION=$(VERSION) TAGS=$(TAGS) PROFILE=$(SIGNKEY) SHARE_PROFILE=$(SHAREKEY) APPID=$(APPID) \
 		scripts/giode-build.sh -o $(OUT)/PocketAgent.ipa ios
 
 ios-sim:        ## .app for the iOS simulator (without the on-device engine)

@@ -89,7 +89,7 @@ jobs:
         with:
           packages: 'platforms;android-35 build-tools;35.0.0 ndk;27.0.12077973'
       - name: Install the giode CLI
-        run: go install github.com/mehran9675/giode-cli/cmd/giode@a7149b391758731d89ea2703d60e03ac217e2a6f
+        run: go install github.com/xmhrnx/giode-cli/cmd/giode@4b9af2f9413b3c0d0e5f0193011006e9cc2be9fc
       - name: Use the release tag as the app version
         run: |
           TAG_VERSION=$(echo "${{ github.ref_name }}" | sed -E 's/^v//')
@@ -135,7 +135,7 @@ jobs:
           go-version-file: go.mod
           cache: true
       - name: Install the giode CLI
-        run: go install github.com/mehran9675/giode-cli/cmd/giode@a7149b391758731d89ea2703d60e03ac217e2a6f
+        run: go install github.com/xmhrnx/giode-cli/cmd/giode@4b9af2f9413b3c0d0e5f0193011006e9cc2be9fc
       - name: Use the release tag as the app version
         run: |
           TAG_VERSION=$(echo "${{ github.ref_name }}" | sed -E 's/^v//')
@@ -156,6 +156,10 @@ jobs:
           PROFILE_PATH="$RUNNER_TEMP/profile.mobileprovision"
           echo "${{ secrets.APPLE_CERTIFICATE_BASE64 }}" | base64 --decode > "$CERT_PATH"
           echo "${{ secrets.APPLE_PROVISION_PROFILE_BASE64 }}" | base64 --decode > "$PROFILE_PATH"
+          # Optional: the share extension's profile; without it the app isn't a share target on iOS.
+          if [ -n "${{ secrets.APPLE_SHARE_PROFILE_BASE64 }}" ]; then
+            echo "${{ secrets.APPLE_SHARE_PROFILE_BASE64 }}" | base64 --decode > "$RUNNER_TEMP/share.mobileprovision"
+          fi
           security create-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
           security default-keychain -s build.keychain
@@ -169,10 +173,12 @@ jobs:
         env:
           LLAMA: 1
         run: |
+          SHARE=""
+          [ -f "$RUNNER_TEMP/share.mobileprovision" ] && SHARE="$RUNNER_TEMP/share.mobileprovision"
           if [ -n "${{ secrets.APPLE_APPID }}" ]; then
-            make ios SIGNKEY="$RUNNER_TEMP/profile.mobileprovision" APPID="${{ secrets.APPLE_APPID }}"
+            make ios SIGNKEY="$RUNNER_TEMP/profile.mobileprovision" SHAREKEY="$SHARE" APPID="${{ secrets.APPLE_APPID }}"
           else
-            make ios SIGNKEY="$RUNNER_TEMP/profile.mobileprovision"
+            make ios SIGNKEY="$RUNNER_TEMP/profile.mobileprovision" SHAREKEY="$SHARE"
           fi
       - name: Build iOS simulator app
         if: steps.signing.outputs.has != 'true'

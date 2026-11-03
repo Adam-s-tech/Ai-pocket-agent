@@ -2,8 +2,8 @@ package widgets
 
 import (
 	"gioui.org/unit"
-	"github.com/mehran9675/giode"
-	pr "github.com/mehran9675/giode/styles/properties"
+	"github.com/xmhrnx/giode"
+	pr "github.com/xmhrnx/giode/styles/properties"
 )
 
 // TextStyle is a text style shorthand.

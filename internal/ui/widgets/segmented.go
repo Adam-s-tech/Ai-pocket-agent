@@ -3,8 +3,8 @@ package widgets
 import (
 	"strings"
 
-	"github.com/mehran9675/giode"
-	"github.com/mehran9675/giode/components/segmented"
+	"github.com/xmhrnx/giode"
+	"github.com/xmhrnx/giode/components/segmented"
 
 	"github.com/mehran9675/pocket-agent/internal/ui/theme"
 )

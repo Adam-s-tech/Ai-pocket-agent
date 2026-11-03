@@ -1,8 +1,8 @@
 package widgets
 
 import (
-	"github.com/mehran9675/giode"
-	"github.com/mehran9675/giode/components/toggle"
+	"github.com/xmhrnx/giode"
+	"github.com/xmhrnx/giode/components/toggle"
 )
 
 // Toggle is an on/off switch kept under key, showing on and calling

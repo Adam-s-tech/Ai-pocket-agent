@@ -1,4 +1,4 @@
-# Packaging for the giode CLI (github.com/mehran9675/giode-cli): `giode build android`,
+# Packaging for the giode CLI (github.com/xmhrnx/giode-cli): `giode build android`,
 # `giode run android`, ... scripts/giode-build.sh sets the per-build values (version,
 # build tags, signing files) for one build; see docs/building.md.
 
@@ -8,6 +8,12 @@ id = "com.mehran9675.pocketagent"
 version = "1.0.0"
 build = 1
 icon = "assets/appicon.png"
+# The launch screen until the first frame: the theme's background, dark and light.
+splash_color = "#0C0D10"
+splash_color_light = "#FFFFFF"
+# In the share sheet for text, links and files; they open a new chat. iOS device builds
+# need the share extension's provisioning profile (SHARE_PROFILE in scripts/giode-build.sh).
+share_target = true
 publisher = "Mehran"
 description = "Private AI chat, research and agents - on-device or with the cloud models you choose."
 website = "https://github.com/Mehran9675/pocket-agent"

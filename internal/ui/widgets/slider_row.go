@@ -3,8 +3,8 @@ package widgets
 import (
 	"math"
 
-	"github.com/mehran9675/giode"
-	"github.com/mehran9675/giode/components/slider"
+	"github.com/xmhrnx/giode"
+	"github.com/xmhrnx/giode/components/slider"
 
 	"github.com/mehran9675/pocket-agent/internal/ui/theme"
 )
