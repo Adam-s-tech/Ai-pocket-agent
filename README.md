@@ -52,6 +52,13 @@ dozens of sources and writes a cited report. Written in Go with
   sandbox, reading long attachments, long-term memory. Per-tool permissions with inline
   *Allow once / Always allow / Deny* approval.
 - **MCP servers** (Streamable HTTP) add remote tools to chats and agents.
+- **Terminal**: SSH to your servers on every platform - colours, full-screen programs,
+  scrollback and a key bar with Esc, Tab, Ctrl and arrows - signing in with a password or the
+  app's own Ed25519 key (kept in the Keychain / Keystore). Android and desktops also get a local
+  shell; iOS doesn't let apps run programs, so there it's SSH only. Agents can run commands on
+  saved hosts (and the device shell) with tools that ask first.
+- **Images in replies**, from the web or the agent's workspace, with a zoomable viewer; video
+  and audio open in the system's player.
 - **Skills**: install SKILL.md skills from a file, a .zip or a link (GitHub folders included), or
   write your own, and turn them on or off in Settings. Models see each skill's description and
   load its instructions and files when a task calls for them.
