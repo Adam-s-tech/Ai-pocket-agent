@@ -274,7 +274,6 @@
   "Higher is more varied.": "По-високата стойност дава повече разнообразие.",
   "How agents work: planning, pace and when to stop. Added after each agent's own instructions.": "Как работят агентите: планиране, темп и кога да спрат. Добавя се след собствените инструкции на всеки агент.",
   "How do the leading on-device AI chips compare in 2026?": "Как се сравняват водещите AI чипове за устройства през 2026 г.?",
-  "How many model calls the agent may make for one task.": "Колко извиквания на модела може да направи агентът за една задача.",
   "How many model calls the agent may make for one task. Leave it blank for no limit; the token budget still applies.": "Колко извиквания на модела може да направи агентът за една задача. Оставете празно за без ограничение; бюджетът за токени продължава да важи.",
   "How many recent tokens the penalties look at.": "Колко скорошни токена вземат предвид наказанията.",
   "How models are instructed": "Как се инструктират моделите",
@@ -726,10 +725,6 @@
   "{n} models": {
     "one": "{n} модел",
     "other": "{n} модела"
-  },
-  "{n} models · search to see all": {
-    "one": "{n} модел · търсете, за да видите всички",
-    "other": "{n} модела · търсете, за да видите всички"
   },
   "{n} notes": {
     "one": "{n} бележка",

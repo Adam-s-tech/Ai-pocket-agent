@@ -274,7 +274,6 @@
   "Higher is more varied.": "Høyere gir mer variasjon.",
   "How agents work: planning, pace and when to stop. Added after each agent's own instructions.": "Hvordan agenter jobber: planlegging, tempo og når de skal stoppe. Legges til etter hver agents egne instruksjoner.",
   "How do the leading on-device AI chips compare in 2026?": "Hvordan står de ledende AI-brikkene for enheter seg mot hverandre i 2026?",
-  "How many model calls the agent may make for one task.": "Hvor mange modellkall agenten kan gjøre for én oppgave.",
   "How many model calls the agent may make for one task. Leave it blank for no limit; the token budget still applies.": "Hvor mange modellkall agenten kan gjøre for én oppgave. La feltet stå tomt for ingen grense; tokenbudsjettet gjelder fortsatt.",
   "How many recent tokens the penalties look at.": "Hvor mange av de siste tokenene straffene ser på.",
   "How models are instructed": "Hvordan modellene instrueres",
@@ -726,10 +725,6 @@
   "{n} models": {
     "one": "{n} modell",
     "other": "{n} modeller"
-  },
-  "{n} models · search to see all": {
-    "one": "{n} modell · søk for å se alle",
-    "other": "{n} modeller · søk for å se alle"
   },
   "{n} notes": {
     "one": "{n} notat",

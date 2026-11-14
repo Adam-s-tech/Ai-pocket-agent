@@ -274,7 +274,6 @@
   "Higher is more varied.": "Suurempi on vaihtelevampi.",
   "How agents work: planning, pace and when to stop. Added after each agent's own instructions.": "Miten agentit toimivat: suunnittelu, tahti ja milloin lopettaa. Lisätään kunkin agentin omien ohjeiden perään.",
   "How do the leading on-device AI chips compare in 2026?": "Miten johtavat laitteen tekoälysirut vertautuvat vuonna 2026?",
-  "How many model calls the agent may make for one task.": "Kuinka monta mallikutsua agentti saa tehdä yhtä tehtävää kohden.",
   "How many model calls the agent may make for one task. Leave it blank for no limit; the token budget still applies.": "Kuinka monta mallikutsua agentti saa tehdä yhtä tehtävää kohden. Jätä tyhjäksi, jos et halua rajaa; tokenbudjetti on silti voimassa.",
   "How many recent tokens the penalties look at.": "Kuinka montaa viimeisintä tokenia rangaistukset tarkastelevat.",
   "How models are instructed": "Miten malleja ohjeistetaan",
@@ -726,10 +725,6 @@
   "{n} models": {
     "one": "{n} malli",
     "other": "{n} mallia"
-  },
-  "{n} models · search to see all": {
-    "one": "{n} malli · hae nähdäksesi kaikki",
-    "other": "{n} mallia · hae nähdäksesi kaikki"
   },
   "{n} notes": {
     "one": "{n} muistiinpano",

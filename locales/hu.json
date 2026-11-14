@@ -274,7 +274,6 @@
   "Higher is more varied.": "A nagyobb változatosabb.",
   "How agents work: planning, pace and when to stop. Added after each agent's own instructions.": "Hogyan dolgoznak az ügynökök: tervezés, tempó és mikor álljanak meg. Az egyes ügynökök saját utasításai után kerül hozzáadásra.",
   "How do the leading on-device AI chips compare in 2026?": "Hogyan viszonyulnak egymáshoz a vezető eszközön futó MI-chipek 2026-ban?",
-  "How many model calls the agent may make for one task.": "Hány modellhívást végezhet az ügynök egy feladathoz.",
   "How many model calls the agent may make for one task. Leave it blank for no limit; the token budget still applies.": "Hány modellhívást végezhet az ügynök egy feladathoz. Hagyd üresen, ha nem szeretnél korlátot; a tokenkeret továbbra is érvényes.",
   "How many recent tokens the penalties look at.": "Hány legutóbbi tokent vesznek figyelembe a büntetések.",
   "How models are instructed": "Hogyan kapnak utasítást a modellek",
@@ -726,10 +725,6 @@
   "{n} models": {
     "one": "{n} modell",
     "other": "{n} modell"
-  },
-  "{n} models · search to see all": {
-    "one": "{n} modell · keress, hogy mindet lásd",
-    "other": "{n} modell · keress, hogy mindet lásd"
   },
   "{n} notes": {
     "one": "{n} jegyzet",

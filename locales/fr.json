@@ -274,7 +274,6 @@
   "Higher is more varied.": "Plus la valeur est élevée, plus c'est varié.",
   "How agents work: planning, pace and when to stop. Added after each agent's own instructions.": "Comment travaillent les agents : planification, rythme et moment d'arrêter. Ajouté après les instructions propres à chaque agent.",
   "How do the leading on-device AI chips compare in 2026?": "Comment se comparent les principales puces d'IA embarquée en 2026 ?",
-  "How many model calls the agent may make for one task.": "Nombre d'appels au modèle que l'agent peut faire pour une tâche.",
   "How many model calls the agent may make for one task. Leave it blank for no limit; the token budget still applies.": "Nombre d'appels au modèle que l'agent peut effectuer pour une tâche. Laissez vide pour ne fixer aucune limite ; le budget de tokens s'applique toujours.",
   "How many recent tokens the penalties look at.": "Nombre de tokens récents pris en compte par les pénalités.",
   "How models are instructed": "Comment les modèles sont instruits",
@@ -726,10 +725,6 @@
   "{n} models": {
     "one": "{n} modèle",
     "other": "{n} modèles"
-  },
-  "{n} models · search to see all": {
-    "one": "{n} modèle · recherchez pour tout voir",
-    "other": "{n} modèles · recherchez pour tout voir"
   },
   "{n} notes": {
     "one": "{n} note",

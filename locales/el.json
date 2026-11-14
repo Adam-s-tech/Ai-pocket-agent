@@ -274,7 +274,6 @@
   "Higher is more varied.": "Υψηλότερη τιμή δίνει μεγαλύτερη ποικιλία.",
   "How agents work: planning, pace and when to stop. Added after each agent's own instructions.": "Πώς δουλεύουν οι πράκτορες: σχεδιασμός, ρυθμός και πότε να σταματούν. Προστίθεται μετά τις οδηγίες κάθε πράκτορα.",
   "How do the leading on-device AI chips compare in 2026?": "Πώς συγκρίνονται τα κορυφαία τσιπ AI για συσκευές το 2026;",
-  "How many model calls the agent may make for one task.": "Πόσες κλήσεις μοντέλου μπορεί να κάνει ο πράκτορας για μία εργασία.",
   "How many model calls the agent may make for one task. Leave it blank for no limit; the token budget still applies.": "Πόσες κλήσεις μοντέλου μπορεί να κάνει ο πράκτορας για μία εργασία. Αφήστε το κενό χωρίς όριο· ο προϋπολογισμός token εξακολουθεί να ισχύει.",
   "How many recent tokens the penalties look at.": "Πόσα πρόσφατα token εξετάζουν οι ποινές.",
   "How models are instructed": "Πώς λαμβάνουν οδηγίες τα μοντέλα",
@@ -726,10 +725,6 @@
   "{n} models": {
     "one": "{n} μοντέλο",
     "other": "{n} μοντέλα"
-  },
-  "{n} models · search to see all": {
-    "one": "{n} μοντέλο · αναζητήστε για να δείτε όλα",
-    "other": "{n} μοντέλα · αναζητήστε για να δείτε όλα"
   },
   "{n} notes": {
     "one": "{n} σημείωση",

@@ -274,7 +274,6 @@
   "Higher is more varied.": "Suurem on mitmekesisem.",
   "How agents work: planning, pace and when to stop. Added after each agent's own instructions.": "Kuidas agendid töötavad: kavandamine, tempo ja millal lõpetada. Lisatakse iga agendi enda juhiste järele.",
   "How do the leading on-device AI chips compare in 2026?": "Kuidas juhtivad seadmesisesed tehisaru kiibid 2026. aastal võrdlevad?",
-  "How many model calls the agent may make for one task.": "Mitu mudelipäringut võib agent ühe ülesande jaoks teha.",
   "How many model calls the agent may make for one task. Leave it blank for no limit; the token budget still applies.": "Mitu mudelikutset võib agent ühe ülesande jaoks teha. Jätke tühjaks, kui piirangut ei soovi; tokenite eelarve kehtib endiselt.",
   "How many recent tokens the penalties look at.": "Mitut viimast tokenit trahvid arvesse võtavad.",
   "How models are instructed": "Kuidas mudeleid juhendatakse",
@@ -726,10 +725,6 @@
   "{n} models": {
     "one": "{n} mudel",
     "other": "{n} mudelit"
-  },
-  "{n} models · search to see all": {
-    "one": "{n} mudel · kõigi nägemiseks otsige",
-    "other": "{n} mudelit · kõigi nägemiseks otsige"
   },
   "{n} notes": {
     "one": "{n} märge",

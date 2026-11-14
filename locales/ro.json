@@ -277,7 +277,6 @@
   "Higher is more varied.": "O valoare mai mare dă mai multă varietate.",
   "How agents work: planning, pace and when to stop. Added after each agent's own instructions.": "Cum lucrează agenții: planificare, ritm și când să se oprească. Se adaugă după instrucțiunile proprii ale fiecărui agent.",
   "How do the leading on-device AI chips compare in 2026?": "Cum se compară principalele cipuri AI pentru dispozitive în 2026?",
-  "How many model calls the agent may make for one task.": "Câte apeluri de model poate face agentul pentru o sarcină.",
   "How many model calls the agent may make for one task. Leave it blank for no limit; the token budget still applies.": "Câte apeluri către model poate face agentul pentru o sarcină. Lăsați câmpul gol pentru nicio limită; bugetul de tokenuri se aplică în continuare.",
   "How many recent tokens the penalties look at.": "Câte tokenuri recente iau în calcul penalizările.",
   "How models are instructed": "Cum sunt instruite modelele",
@@ -739,11 +738,6 @@
     "few": "{n} modele",
     "one": "{n} model",
     "other": "{n} de modele"
-  },
-  "{n} models · search to see all": {
-    "few": "{n} modele · căutați pentru a vedea tot",
-    "one": "{n} model · căutați pentru a vedea tot",
-    "other": "{n} de modele · căutați pentru a vedea tot"
   },
   "{n} notes": {
     "few": "{n} notițe",
