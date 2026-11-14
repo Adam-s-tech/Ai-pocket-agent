@@ -12,6 +12,7 @@ import (
 
 	"gioui.org/app"
 	_ "gioui.org/app/permission/microphone" // dictation on Android
+	_ "github.com/xmhrnx/giode/dictate"     // speech to text, for the composer's mic
 
 	"github.com/xmhrnx/giode"
 

@@ -8,9 +8,10 @@ id = "com.mehran9675.pocketagent"
 version = "1.0.0"
 build = 1
 icon = "assets/appicon.png"
-# The launch screen until the first frame: the theme's background, dark and light.
+# The launch screen until the first frame: the app's background. The app opens in
+# its dark theme unless changed, so light mode's launch screen matches it too.
 splash_color = "#0C0D10"
-splash_color_light = "#FFFFFF"
+splash_color_light = "#0C0D10"
 # In the share sheet for text, links and files; they open a new chat. iOS device builds
 # need the share extension's provisioning profile (SHARE_PROFILE in scripts/giode-build.sh).
 share_target = true
