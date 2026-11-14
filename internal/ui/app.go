@@ -63,6 +63,10 @@ type App struct {
 
 	skills *skills.Library
 
+	// pickerProvider is the provider whose full model list the model
+	// picker shows; "" for the overview.
+	pickerProvider string
+
 	// navigation: "" is the chat; other routes are pages.
 	route   string
 	history []string

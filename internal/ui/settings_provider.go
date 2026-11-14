@@ -5,12 +5,12 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/xmhrnx/giode"
-	"github.com/xmhrnx/giode/components/input"
 	"github.com/mehran9675/pocket-agent/internal/llm"
 	"github.com/mehran9675/pocket-agent/internal/store"
 	"github.com/mehran9675/pocket-agent/internal/ui/theme"
 	"github.com/mehran9675/pocket-agent/internal/ui/widgets"
+	"github.com/xmhrnx/giode"
+	"github.com/xmhrnx/giode/components/input"
 )
 
 func (a *App) providerTitle(id string) string {
@@ -120,8 +120,13 @@ func (a *App) providerBody(id string) widgets.El {
 			var rows []widgets.El
 			models := append([]llm.ModelInfo(nil), cfg.Models...)
 			sort.SliceStable(models, func(i, j int) bool { return pinned[models[i].ID] && !pinned[models[j].ID] })
+			search := a.input("prov/search/"+id, tr("Search models"), "")
+			q := strings.ToLower(strings.TrimSpace(search.Text()))
 			for _, m := range models {
 				m := m
+				if !matchesAny(q, m.Name, m.ID) {
+					continue
+				}
 				star := "star"
 				color := theme.T.Faint
 				if pinned[m.ID] {
@@ -145,7 +150,9 @@ func (a *App) providerBody(id string) widgets.El {
 			}
 			kids = append(kids, widgets.Col(widgets.St{Gap: 0, Width: -1}, widgets.SectionLabel(fmt.Sprintf(tr("Models · %d"), len(cfg.Models))),
 				widgets.Text(tr("Star models to keep them at the top of the picker."), theme.SizeCaption, theme.T.Muted), widgets.Gap(0, 8),
-				widgets.Card(widgets.St{Padding: giode.UniformInset(4), Gap: 0}, rows...)))
+				search, widgets.Gap(0, 8),
+				widgets.When(len(rows) == 0, func() widgets.El { return widgets.Text(tr("No models match."), theme.SizeFootnote, theme.T.Muted) }),
+				widgets.When(len(rows) > 0, func() widgets.El { return widgets.Card(widgets.St{Padding: giode.UniformInset(4), Gap: 0}, rows...) })))
 		}
 		kids = append(kids, widgets.Group(
 			widgets.ListRow("prov/enabled/"+id, "zap", theme.T.Primary, tr("Enabled"), tr("Show this provider's models in the picker"), widgets.Toggle("prov/en/"+id, cfg.Enabled, func(v bool) {

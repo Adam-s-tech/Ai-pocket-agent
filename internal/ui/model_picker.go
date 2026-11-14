@@ -2,6 +2,7 @@ package ui
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 
 	"github.com/xmhrnx/giode"
@@ -16,8 +17,10 @@ import (
 func (a *App) openModelSheet() {
 	search := a.input("models/search", tr("Search models"), "")
 	search.SetText("")
+	a.pickerProvider = ""
 	for _, p := range a.settings.Providers {
-		if p.Enabled && len(p.Models) == 0 && p.APIKey != "" {
+		pre, _ := llm.PresetByID(p.Preset)
+		if p.Enabled && len(p.Models) == 0 && (p.APIKey != "" || pre.KeyOptional) {
 			a.refreshModels(p)
 		}
 	}
@@ -66,16 +69,12 @@ func (a *App) modelList(query string) widgets.El {
 				append([]widgets.El{widgets.Col(widgets.St{Gap: 2, FlexGrow: 1}, texts...)}, right...)...)
 		}, func() { pick(ref) })
 	}
-	match := func(s ...string) bool {
-		if q == "" {
-			return true
+	match := func(s ...string) bool { return matchesAny(q, s...) }
+	if a.pickerProvider != "" {
+		if p := a.settings.Provider(a.pickerProvider); p != nil {
+			return a.providerModels(p, q, kids, modelRow)
 		}
-		for _, x := range s {
-			if strings.Contains(strings.ToLower(x), q) {
-				return true
-			}
-		}
-		return false
+		a.pickerProvider = ""
 	}
 
 	// On-device
@@ -146,20 +145,11 @@ func (a *App) modelList(query string) widgets.El {
 			if !match(name, m.ID, p.Name) {
 				continue
 			}
-			if q == "" && shown >= 12 && !pinned[m.ID] && cur.Model != m.ID {
+			if q == "" && shown >= pickerPreview && !pinned[m.ID] && cur.Model != m.ID {
 				continue
 			}
 			shown++
-			sub := m.ID
-			if sub == name {
-				sub = ""
-			}
-			if m.ContextWindow > 0 {
-				if sub != "" {
-					sub += " · "
-				}
-				sub += fmt.Sprintf(tr("%s context"), compactNum(m.ContextWindow))
-			}
+			sub := modelSubtitle(m, name)
 			var bs []widgets.El
 			if pinned[m.ID] {
 				bs = append(bs, widgets.Icon("star", 14, theme.T.Warning))
@@ -172,8 +162,13 @@ func (a *App) modelList(query string) widgets.El {
 		status := ""
 		if a.refresh[p.ID] {
 			status = tr("Loading…")
-		} else if len(p.Models) > len(rows) && q == "" {
-			status = trn("{n} models · search to see all", len(p.Models))
+		}
+		// The rest of a long list is on the provider's own page.
+		if len(models) > len(rows) {
+			id := p.ID
+			rows = append(rows, widgets.ListRow("models/all/"+id, "list-checks", theme.T.Muted, trn("See all {n} models", len(models)), "", nil, func() {
+				a.pickerProvider = id
+			}))
 		}
 		kids = append(kids, providerHeader(providerIcon(p.Preset), providerColor(p.Preset), p.Name, status))
 		if len(rows) == 0 {
@@ -190,5 +185,77 @@ func (a *App) modelList(query string) widgets.El {
 				a.navigate("settings/providers")
 			})))
 	}
+	return widgets.Col(widgets.St{Gap: 6, Width: -1}, kids...)
+}
+
+// pickerPreview is how many of a provider's models the picker lists
+// before "See all".
+const pickerPreview = 6
+
+// matchesAny reports whether any of s contains the lower-case query q.
+func matchesAny(q string, s ...string) bool {
+	if q == "" {
+		return true
+	}
+	for _, x := range s {
+		if strings.Contains(strings.ToLower(x), q) {
+			return true
+		}
+	}
+	return false
+}
+
+// modelSubtitle is a model's ID, when its name differs, and context size.
+func modelSubtitle(m llm.ModelInfo, name string) string {
+	sub := m.ID
+	if sub == name {
+		sub = ""
+	}
+	if m.ContextWindow > 0 {
+		if sub != "" {
+			sub += " · "
+		}
+		sub += fmt.Sprintf(tr("%s context"), compactNum(m.ContextWindow))
+	}
+	return sub
+}
+
+// providerModels is the picker's page for one provider: every model,
+// searchable, favorites first.
+func (a *App) providerModels(p *store.ProviderConfig, q string, kids []widgets.El, row func(store.ModelRef, string, string, ...widgets.El) widgets.El) widgets.El {
+	pre, _ := llm.PresetByID(p.Preset)
+	models := p.Models
+	if len(models) == 0 {
+		models = pre.Models
+	}
+	pinned := map[string]bool{}
+	for _, id := range p.Pinned {
+		pinned[id] = true
+	}
+	ordered := append([]llm.ModelInfo(nil), models...)
+	sort.SliceStable(ordered, func(i, j int) bool { return pinned[ordered[i].ID] && !pinned[ordered[j].ID] })
+	header := widgets.Row(widgets.St{Gap: 6, Width: -1, Align: giode.AlignCenter},
+		widgets.IconButton("models/back", "arrow-left", tr("Back"), 18, theme.T.Text, func() { a.pickerProvider = "" }),
+		widgets.Icon(providerIcon(p.Preset), 16, providerColor(p.Preset)),
+		widgets.Text(p.Name, theme.SizeHeadline, theme.T.Text, giode.FontWeightSemiBold),
+		widgets.Spacer(),
+		widgets.Text(trn("{n} models", len(models)), theme.SizeCaption, theme.T.Faint))
+	kids = append([]widgets.El{header}, kids...)
+	var rows []widgets.El
+	for _, m := range ordered {
+		name := firstNonEmpty(m.Name, m.ID)
+		if !matchesAny(q, name, m.ID) {
+			continue
+		}
+		var bs []widgets.El
+		if pinned[m.ID] {
+			bs = append(bs, widgets.Icon("star", 14, theme.T.Warning))
+		}
+		rows = append(rows, row(store.ModelRef{Provider: p.ID, Model: m.ID}, name, modelSubtitle(m, name), bs...))
+	}
+	if len(rows) == 0 {
+		rows = append(rows, giode.Box(widgets.St{Padding: giode.SymmetricInset(12, 8)}, widgets.Text(tr("No models match."), theme.SizeFootnote, theme.T.Muted)))
+	}
+	kids = append(kids, widgets.Col(widgets.St{Gap: 2, Width: -1}, rows...))
 	return widgets.Col(widgets.St{Gap: 6, Width: -1}, kids...)
 }
