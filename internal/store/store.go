@@ -309,3 +309,9 @@ func (s *Store) ClearMemory() {
 	s.memMu.Unlock()
 	s.queue(filepath.Join(s.dir, "memory.json"), []string{})
 }
+
+// KnownHostsPath is where trusted SSH host keys are kept.
+func (s *Store) KnownHostsPath() string { return filepath.Join(s.dir, "known_hosts") }
+
+// SSHKeyName is the secret holding the app's SSH private key.
+const SSHKeyName = "ssh-key"

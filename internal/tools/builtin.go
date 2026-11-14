@@ -32,6 +32,8 @@ func Builtins() []*Tool {
 		planTool(),
 		rememberTool(),
 		forgetTool(),
+		sshTool(),
+		shellTool(),
 	}
 }
 

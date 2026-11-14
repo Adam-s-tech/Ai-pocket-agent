@@ -152,11 +152,13 @@ func (a *App) startTurn(c *store.Conversation) {
 			},
 			Skills: skillServer{a.skills, a.enabledSkills()},
 		}
+		env.Shell = a.shellFor(a.shellHome())
 		if a.settings.MemoryEnabled {
 			env.Memory = a.st
 		}
 		if c.Mode == store.ModeAgent {
 			env.Workspace = a.st.Workspace(c.ID)
+			env.Shell = a.shellFor(env.Workspace)
 		}
 		var memory []string
 		if a.settings.MemoryEnabled {
@@ -181,6 +183,7 @@ func (a *App) startTurn(c *store.Conversation) {
 			MaxSteps:     maxSteps,
 			TokenBudget:  ag.Budget(),
 			Skills:       a.skillIndex(set, info.Tools),
+			SSHHosts:     a.sshHostIndex(set),
 			Prompts:      prompts,
 		}
 		if !info.Tools {

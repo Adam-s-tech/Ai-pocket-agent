@@ -20,6 +20,19 @@ func (a *App) scroll(key string, content func() widgets.El) widgets.El {
 	return s
 }
 
+// hscroll is scroll for a row that scrolls sideways, without a bar.
+func (a *App) hscroll(key string, content func() widgets.El) widgets.El {
+	s, ok := a.scrolls[key]
+	if !ok {
+		holder := &struct{ fn func() widgets.El }{}
+		s = giode.Scroll(func() widgets.El { return holder.fn() }, widgets.St{ScrollBar: giode.ScrollBar{Hidden: true}}).Axis(giode.Horizontal)
+		a.scrolls[key] = s
+		scrollContent[s] = holder
+	}
+	scrollContent[s].fn = content
+	return s
+}
+
 var scrollContent = map[*scroll.Scroll]*struct{ fn func() widgets.El }{}
 
 // input returns the text field under key, created with init text.

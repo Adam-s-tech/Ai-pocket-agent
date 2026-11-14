@@ -2,6 +2,9 @@ package store
 
 import (
 	"encoding/json"
+	"os"
+	"path/filepath"
+	"strings"
 	"sync"
 )
 
@@ -102,4 +105,38 @@ func withoutKeys(st *Settings) *Settings {
 	}
 	c.Search.APIKey = ""
 	return &c
+}
+
+// SetSecret stores a credential under name: in the platform's store when
+// it works, else in a private file. An empty value removes it.
+func (s *Store) SetSecret(name string, value []byte) error {
+	if s.vault != nil {
+		return s.vault.store.Set("pocket-agent/"+name, value)
+	}
+	path := s.secretPath(name)
+	if len(value) == 0 {
+		_ = os.Remove(path)
+		return nil
+	}
+	if err := os.MkdirAll(filepath.Dir(path), 0o700); err != nil {
+		return err
+	}
+	return os.WriteFile(path, value, 0o600)
+}
+
+// Secret reads a credential stored with SetSecret; nil when there is none.
+func (s *Store) Secret(name string) []byte {
+	if s.vault != nil {
+		b, err := s.vault.store.Get("pocket-agent/" + name)
+		if err != nil {
+			return nil
+		}
+		return b
+	}
+	b, _ := os.ReadFile(s.secretPath(name))
+	return b
+}
+
+func (s *Store) secretPath(name string) string {
+	return filepath.Join(s.dir, "secrets", strings.ReplaceAll(name, "/", "_"))
 }

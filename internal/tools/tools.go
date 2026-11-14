@@ -58,6 +58,16 @@ type Env struct {
 	OnPlan func([]PlanItem)
 	// Skills serves the enabled skills.
 	Skills Skills
+	// Shell runs commands on SSH hosts and the device.
+	Shell Shell
+}
+
+// Shell runs commands for agents.
+type Shell interface {
+	// SSH runs command on the saved host named host.
+	SSH(ctx context.Context, host, command string) (string, error)
+	// Local runs command in the device's shell, in the workspace.
+	Local(ctx context.Context, command string) (string, error)
 }
 
 // Skills gives models the skills the user installed.

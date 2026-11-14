@@ -44,6 +44,8 @@ var englishOne = map[string]string{
 	"{n} agents":                     "{n} agent",
 	"{n} memories":                   "{n} memory",
 	"+{n} more":                      "+{n} more",
+	"See all {n} models":             "See all {n} model",
+	"{n} models":                     "{n} model",
 }
 
 // uiKeys collects the text the UI translates: tr, trn and key calls in

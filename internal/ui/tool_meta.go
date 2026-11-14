@@ -36,6 +36,10 @@ func (a *App) toolMeta(t *store.ToolRun) (icon, title string) {
 		return "calculator", verb(tr("Calculating {expression}", "expression", s("expression")), tr("Calculated {expression}", "expression", s("expression")))
 	case "current_datetime":
 		return "clock", verb(tr("Checking the time"), tr("Checked the time"))
+	case "ssh_run":
+		return "terminal", verb(tr("Running {command} on {host}", "command", "`"+s("command")+"`", "host", s("host")), tr("Ran {command} on {host}", "command", "`"+s("command")+"`", "host", s("host")))
+	case "shell_run":
+		return "square-terminal", verb(tr("Running {command}", "command", "`"+s("command")+"`"), tr("Ran {command}", "command", "`"+s("command")+"`"))
 	case "run_javascript":
 		return "square-terminal", verb(tr("Running code"), tr("Ran code"))
 	case "read_attachment":

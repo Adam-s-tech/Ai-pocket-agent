@@ -2,6 +2,7 @@ package ui
 
 import (
 	"github.com/mehran9675/pocket-agent/internal/store"
+	"github.com/mehran9675/pocket-agent/internal/term"
 	"github.com/mehran9675/pocket-agent/internal/tools"
 )
 
@@ -9,6 +10,9 @@ import (
 func (a *App) toolSet(c *store.Conversation, ag *store.Agent) *tools.Set {
 	set := tools.NewSet()
 	add := func(name string) {
+		if name == "shell_run" && !term.LocalShell {
+			return // iOS can't run programs
+		}
 		if t, ok := tools.Builtin(name); ok {
 			if (name == "remember" || name == "forget") && !a.settings.MemoryEnabled {
 				return

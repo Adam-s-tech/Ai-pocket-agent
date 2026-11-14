@@ -154,6 +154,8 @@ type SystemPromptInput struct {
 	TokenBudget int
 	// Skills are the enabled skills, each a name and when to use it.
 	Skills [][2]string
+	// SSHHosts are the hosts ssh_run reaches, each a name and user@host.
+	SSHHosts [][2]string
 	// Prompts are the user's rewritten system prompts.
 	Prompts Prompts
 	// Summary condenses the conversation before the messages sent.
@@ -197,6 +199,12 @@ func SystemPrompt(in SystemPromptInput) string {
 			"before starting and follow its instructions; read_skill_file opens files it refers to.\n")
 		for _, s := range in.Skills {
 			b.WriteString("- " + s[0] + ": " + s[1] + "\n")
+		}
+	}
+	if len(in.SSHHosts) > 0 {
+		b.WriteString("\n\n# SSH hosts\nssh_run reaches these computers the user saved:\n")
+		for _, h := range in.SSHHosts {
+			b.WriteString("- " + h[0] + " (" + h[1] + ")\n")
 		}
 	}
 	if in.Instructions != "" {

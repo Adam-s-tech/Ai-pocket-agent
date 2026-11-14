@@ -11,7 +11,7 @@ func BuiltinAgents() []*Agent {
 				"run_javascript or calculator, and save deliverables (reports, code, data) to the workspace with write_file. " +
 				"Finish with a concise summary of what you did, what you found and which files you produced.",
 			Tools: []string{"update_plan", "web_search", "fetch_url", "run_javascript", "calculator", "current_datetime",
-				"list_files", "read_file", "write_file", "edit_file", "delete_file", "read_attachment", "remember"},
+				"list_files", "read_file", "write_file", "edit_file", "delete_file", "read_attachment", "remember", "ssh_run", "shell_run"},
 			Starters: []string{
 				"Compare the three best budget mechanical keyboards and write a buying guide",
 				"Plan a 4-day trip to Lisbon with a day-by-day itinerary file",
@@ -39,7 +39,7 @@ func BuiltinAgents() []*Agent {
 			Instructions: "You are a senior software engineer. Plan with update_plan, write code into workspace files, and " +
 				"test what can be tested with run_javascript (it can readFile/writeFile workspace files). Iterate until it works. " +
 				"Explain design decisions briefly and finish with how to use the result.",
-			Tools: []string{"update_plan", "run_javascript", "list_files", "read_file", "write_file", "edit_file", "delete_file", "web_search", "fetch_url", "read_attachment"},
+			Tools: []string{"update_plan", "run_javascript", "list_files", "read_file", "write_file", "edit_file", "delete_file", "web_search", "fetch_url", "read_attachment", "ssh_run", "shell_run"},
 			Starters: []string{
 				"Write a JSON-to-CSV converter and test it on sample data",
 				"Implement and benchmark three sorting algorithms",

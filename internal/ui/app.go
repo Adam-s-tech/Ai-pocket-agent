@@ -14,6 +14,8 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/mehran9675/pocket-agent/internal/term"
+
 	"github.com/xmhrnx/giode/components/zoom"
 
 	"github.com/mehran9675/pocket-agent/internal/local"
@@ -71,6 +73,13 @@ type App struct {
 	// pinch-zoom state.
 	viewer     viewerState
 	viewerZoom *zoom.Zoom
+
+	// terms are the open terminal sessions; known the trusted SSH host
+	// keys.
+	terms    []*termTab
+	nextTerm int
+	known    *term.KnownHosts
+	hostKeys map[string]*bool // host editors' key toggles
 
 	// pickerProvider is the provider whose full model list the model
 	// picker shows; "" for the overview.

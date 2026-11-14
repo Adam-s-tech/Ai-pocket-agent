@@ -1,11 +1,12 @@
 package ui
 
 import (
+	"strconv"
 	"strings"
 
-	"github.com/xmhrnx/giode"
 	"github.com/mehran9675/pocket-agent/internal/ui/theme"
 	"github.com/mehran9675/pocket-agent/internal/ui/widgets"
+	"github.com/xmhrnx/giode"
 )
 
 // View is the root element.
@@ -80,6 +81,15 @@ func (a *App) pageView(route string, compact bool) widgets.El {
 		return a.fileViewer(strings.TrimPrefix(route, "file/"), compact)
 	case "viewer":
 		return a.imageViewer(compact)
+	case "terminal":
+		switch {
+		case len(parts) > 2 && parts[1] == "host":
+			return a.hostEditor(parts[2], compact)
+		case len(parts) > 2 && parts[1] == "session":
+			id, _ := strconv.Atoi(parts[2])
+			return a.termView(id, compact)
+		}
+		return a.terminalPage(compact)
 	}
 	return a.chat.view(compact)
 }

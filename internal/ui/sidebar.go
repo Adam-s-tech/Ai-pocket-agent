@@ -55,6 +55,7 @@ func (s *sidebarView) view(inDrawer bool) widgets.El {
 		nav("agents", "bot", tr("Agents"), strings.HasPrefix(a.route, "agents"), func() { a.navigateRoot("agents") }),
 		nav("research", "telescope", tr("Deep research"), false, func() { a.newChat(store.ModeResearch, "") }),
 		nav("library", "hard-drive", tr("On-device models"), a.route == "library", func() { a.navigateRoot("library") }),
+		nav("terminal", "square-terminal", tr("Terminal"), strings.HasPrefix(a.route, "terminal"), func() { a.navigateRoot("terminal") }),
 	)
 
 	list := a.scroll("side/list", func() widgets.El { return s.conversationList() })

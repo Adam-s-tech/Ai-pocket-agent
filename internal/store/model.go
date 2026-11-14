@@ -390,6 +390,8 @@ type Settings struct {
 	Compression Compression `json:"compression"`
 	// Prompts are rewritten system prompts by ID; see agent.PromptDefs.
 	Prompts map[string]string `json:"prompts,omitempty"`
+	// SSHHosts are the computers the Terminal and agents reach over SSH.
+	SSHHosts []SSHHost `json:"sshHosts,omitempty"`
 	// Version counts the one-time upgrades applied to saved settings.
 	Version int `json:"version,omitempty"`
 	// Language is the UI locale, "" for the system's.
@@ -524,4 +526,25 @@ func (s *Settings) upgrade() {
 		}
 	}
 	s.Version = settingsVersion
+}
+
+// SSHHost is a computer reached over SSH. Its password, if it has one,
+// is a secret named "ssh/<ID>"; with UseKey the app's own key signs in.
+type SSHHost struct {
+	ID     string `json:"id"`
+	Name   string `json:"name"`
+	Addr   string `json:"addr"`
+	Port   int    `json:"port,omitempty"`
+	User   string `json:"user"`
+	UseKey bool   `json:"useKey,omitempty"`
+}
+
+// SSHHost returns the host with the given ID or name, nil if none.
+func (s *Settings) SSHHost(idOrName string) *SSHHost {
+	for i := range s.SSHHosts {
+		if h := &s.SSHHosts[i]; h.ID == idOrName || strings.EqualFold(h.Name, idOrName) {
+			return h
+		}
+	}
+	return nil
 }
