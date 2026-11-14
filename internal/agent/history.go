@@ -180,12 +180,16 @@ func SystemPrompt(in SystemPromptInput) string {
 		if len(in.Workspace) > 0 {
 			b.WriteString("\n\nCurrent workspace files: " + strings.Join(in.Workspace, ", ") + ".")
 		}
+		var limits []string
 		if in.MaxSteps > 0 {
-			fmt.Fprintf(&b, "\n\nLimits: at most %d steps", in.MaxSteps)
-			if in.TokenBudget > 0 {
-				fmt.Fprintf(&b, " and about %dk tokens", in.TokenBudget/1000)
-			}
-			b.WriteString(" for this task; aim to finish well within them. If you reach a limit, the user decides whether you continue or write up what you have.")
+			limits = append(limits, fmt.Sprintf("at most %d steps", in.MaxSteps))
+		}
+		if in.TokenBudget > 0 {
+			limits = append(limits, fmt.Sprintf("about %dk tokens", in.TokenBudget/1000))
+		}
+		if len(limits) > 0 {
+			b.WriteString("\n\nLimits: " + strings.Join(limits, " and ") + " for this task; aim to finish well within them. " +
+				"If you reach a limit, the user decides whether you continue or write up what you have.")
 		}
 	}
 	if len(in.Skills) > 0 {

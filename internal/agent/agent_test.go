@@ -25,7 +25,7 @@ func (s *scripted) Chat(_ context.Context, req llm.Request, on func(llm.Event)) 
 		return &llm.Response{ToolCalls: []llm.ToolCall{{ID: "c1", Name: "calculator", Args: json.RawMessage(`{"expression":"6*7"}`)}}, StopReason: "tool_calls"}, nil
 	}
 	last := req.Messages[len(req.Messages)-1]
-	if last.Role != llm.RoleTool || !strings.HasPrefix(last.Text(), "6*7 = 42\n\n[Progress: step 1 of 12") {
+	if last.Role != llm.RoleTool || !strings.HasPrefix(last.Text(), "6*7 = 42\n\n[Progress: step 1]") {
 		return nil, context.DeadlineExceeded
 	}
 	on(llm.Event{Kind: llm.EventText, Text: "42"})

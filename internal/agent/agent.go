@@ -4,6 +4,7 @@
 package agent
 
 import (
+	"math"
 	"context"
 	"errors"
 	"fmt"
@@ -76,9 +77,10 @@ var ErrRefused = errors.New("the model declined to answer this request")
 // limit is hit, or ctx ends. It returns the messages appended to the
 // conversation.
 func (r *Run) Execute(ctx context.Context) ([]llm.Message, error) {
+	// No step limit: the token budget and the user end the run.
 	maxSteps := r.MaxSteps
 	if maxSteps <= 0 {
-		maxSteps = 12
+		maxSteps = math.MaxInt
 	}
 	if r.Final {
 		maxSteps = 1
@@ -259,8 +261,12 @@ const keepToolResults = 4
 
 // progress is the note after each step's tool results.
 func (r *Run) progress(steps, maxSteps, used int) string {
-	note := fmt.Sprintf("\n\n[Progress: step %d of %d", steps, maxSteps)
-	share := float64(steps) / float64(maxSteps)
+	note := fmt.Sprintf("\n\n[Progress: step %d", steps)
+	share := 0.0
+	if maxSteps < math.MaxInt {
+		note += fmt.Sprintf(" of %d", maxSteps)
+		share = float64(steps) / float64(maxSteps)
+	}
 	if r.TokenBudget > 0 {
 		note += fmt.Sprintf(", about %dk of %dk tokens used", (used+500)/1000, r.TokenBudget/1000)
 		share = max(share, float64(used)/float64(r.TokenBudget))

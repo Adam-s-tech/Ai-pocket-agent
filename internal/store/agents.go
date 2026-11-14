@@ -4,7 +4,7 @@ package store
 func BuiltinAgents() []*Agent {
 	return []*Agent{
 		{
-			ID: "general", Name: "Generalist", Icon: "bot", Color: "#7c8cff", Builtin: true, MaxSteps: 30,
+			ID: "general", Name: "Generalist", Icon: "bot", Color: "#7c8cff", Builtin: true,
 			Description: "Plans and carries out multi-step tasks with every tool: web, code, files and memory.",
 			Instructions: "You are an autonomous agent working for the user. Break the task into steps with update_plan, " +
 				"then work through them using your tools, keeping the plan current. Verify facts on the web, compute with " +
@@ -19,7 +19,7 @@ func BuiltinAgents() []*Agent {
 			},
 		},
 		{
-			ID: "researcher", Name: "Researcher", Icon: "telescope", Color: "#38bdf8", Builtin: true, MaxSteps: 25,
+			ID: "researcher", Name: "Researcher", Icon: "telescope", Color: "#38bdf8", Builtin: true,
 			Description: "Investigates a question across many sources and writes a cited report.",
 			Instructions: "You are a meticulous research analyst. Plan your investigation with update_plan, then run " +
 				"several distinct searches in one turn, and read the most promising primary sources with fetch_url - again " +
@@ -34,7 +34,7 @@ func BuiltinAgents() []*Agent {
 			},
 		},
 		{
-			ID: "coder", Name: "Coder", Icon: "code", Color: "#34d399", Builtin: true, MaxSteps: 40,
+			ID: "coder", Name: "Coder", Icon: "code", Color: "#34d399", Builtin: true,
 			Description: "Writes, runs and debugs JavaScript; builds small programs and scripts in the workspace.",
 			Instructions: "You are a senior software engineer. Plan with update_plan, write code into workspace files, and " +
 				"test what can be tested with run_javascript (it can readFile/writeFile workspace files). Iterate until it works. " +
@@ -46,7 +46,7 @@ func BuiltinAgents() []*Agent {
 			},
 		},
 		{
-			ID: "analyst", Name: "Data Analyst", Icon: "database", Color: "#f59e0b", Builtin: true, MaxSteps: 30,
+			ID: "analyst", Name: "Data Analyst", Icon: "database", Color: "#f59e0b", Builtin: true,
 			Description: "Cleans, explores and summarizes data from attachments or the web, with exact numbers.",
 			Instructions: "You are a careful data analyst. Load data from attachments (read_attachment) or the workspace, " +
 				"process it with run_javascript - never estimate numbers you can compute - and report findings with tables. " +
@@ -57,7 +57,7 @@ func BuiltinAgents() []*Agent {
 			},
 		},
 		{
-			ID: "writer", Name: "Writer", Icon: "pen-line", Color: "#f472b6", Builtin: true, MaxSteps: 20,
+			ID: "writer", Name: "Writer", Icon: "pen-line", Color: "#f472b6", Builtin: true,
 			Description: "Drafts, edits and polishes long-form writing, saving versions to the workspace.",
 			Instructions: "You are an experienced editor and writer. Clarify the audience and goal from context, outline with " +
 				"update_plan, draft into the workspace with write_file, then revise for structure, clarity and tone with edit_file. " +

@@ -103,3 +103,16 @@ func TestCompressionLimits(t *testing.T) {
 		t.Fatal(c.Local(8192))
 	}
 }
+
+func TestUpgradeDropsOldReplyLimit(t *testing.T) {
+	s := &Settings{Local: LocalSettings{MaxTokens: 2048}}
+	s.upgrade()
+	if s.Local.MaxTokens != 0 || s.Version != settingsVersion {
+		t.Fatalf("%+v", s)
+	}
+	s.Local.MaxTokens = 2048 // chosen after the upgrade: kept
+	s.upgrade()
+	if s.Local.MaxTokens != 2048 {
+		t.Fatal(s.Local.MaxTokens)
+	}
+}

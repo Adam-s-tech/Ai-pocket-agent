@@ -64,7 +64,12 @@ func (p *Provider) Chat(ctx context.Context, req llm.Request, onEvent func(llm.E
 		return nil, err
 	}
 	// Drop the oldest turns until the prompt leaves room to answer.
-	budget := p.Engine.ContextSize() - min(gen.MaxTokens, p.Engine.ContextSize()/3)
+	window := p.Engine.ContextSize()
+	reserve := gen.MaxTokens
+	if reserve <= 0 {
+		reserve = window / 4
+	}
+	budget := window - min(reserve, window/3)
 	for len(msgs) > 2 && p.Engine.CountTokens(prompt) > budget {
 		msgs = append(msgs[:1], msgs[2:]...)
 		if prompt, err = p.prompt(msgs, req.Thinking); err != nil {
@@ -72,6 +77,10 @@ func (p *Provider) Chat(ctx context.Context, req llm.Request, onEvent func(llm.E
 		}
 	}
 
+	// No reply limit: the rest of the context window.
+	if gen.MaxTokens <= 0 {
+		gen.MaxTokens = max(window-p.Engine.CountTokens(prompt), 64)
+	}
 	col := &collector{onEvent: onEvent, tools: len(req.Tools) > 0}
 	stats, err := p.Engine.Generate(ctx, prompt, gen, func(piece string) bool {
 		col.feed(piece)

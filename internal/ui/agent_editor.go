@@ -33,7 +33,10 @@ func (a *App) saveAgent(ag *store.Agent) {
 	}
 	ag.Description = strings.TrimSpace(a.input(k+"desc", "", ag.Description).Text())
 	ag.Instructions = strings.TrimSpace(a.input(k+"instr", "", ag.Instructions).Text())
-	if n, err := strconv.Atoi(strings.TrimSpace(a.input(k+"steps", "", strconv.Itoa(ag.MaxSteps)).Text())); err == nil && n > 0 && n <= 100 {
+	// Blank or 0 is no limit.
+	if v := strings.TrimSpace(a.input(k+"steps", "", stepsText(ag.MaxSteps)).Text()); v == "" {
+		ag.MaxSteps = 0
+	} else if n, err := strconv.Atoi(v); err == nil && n >= 0 {
 		ag.MaxSteps = n
 	}
 	if n, err := strconv.Atoi(strings.TrimSpace(a.input(k+"budget", "", strconv.Itoa(ag.Budget()/1000)).Text())); err == nil && n > 0 {
@@ -55,7 +58,7 @@ func (a *App) agentEditorBody(ag *store.Agent) widgets.El {
 	name := a.input(k+"name", tr("Name"), ag.Name)
 	desc := a.input(k+"desc", tr("What it's for"), ag.Description)
 	instr := a.input(k+"instr", tr("Instructions"), ag.Instructions, func(i *input.Input) { i.Multiline(true) })
-	steps := a.input(k+"steps", "20", strconv.Itoa(ag.MaxSteps), func(i *input.Input) { i.Keyboard(giode.KeyboardNumeric) })
+	steps := a.input(k+"steps", tr("No limit"), stepsText(ag.MaxSteps), func(i *input.Input) { i.Keyboard(giode.KeyboardNumeric) })
 	budget := a.input(k+"budget", strconv.Itoa(store.DefaultTokenBudget), strconv.Itoa(ag.Budget()/1000), func(i *input.Input) { i.Keyboard(giode.KeyboardNumeric) })
 	starters := a.input(k+"starters", tr("One suggestion per line"), strings.Join(ag.Starters, "\n"), func(i *input.Input) { i.Multiline(true) })
 
@@ -118,7 +121,7 @@ func (a *App) agentEditorBody(ag *store.Agent) widgets.El {
 		widgets.Col(widgets.St{Gap: 6, Width: -1}, label(tr("Color")), giode.Row(widgets.St{Gap: 8, Wrap: giode.WrapWrap}, colors...)),
 		widgets.Col(widgets.St{Gap: 6, Width: -1}, label(tr("Instructions")), widgets.Text(tr("The agent's system prompt: its role, method and what a finished job looks like."), theme.SizeCaption, theme.T.Muted), giode.Box(widgets.St{Width: -1, MinHeight: 160}, instr)),
 		widgets.Col(widgets.St{Gap: 6, Width: -1}, label(tr("Conversation starters")), giode.Box(widgets.St{Width: -1, MinHeight: 90}, starters)),
-		widgets.Col(widgets.St{Gap: 6, Width: -1}, label(tr("Maximum steps")), widgets.Text(tr("How many model calls the agent may make for one task."), theme.SizeCaption, theme.T.Muted), giode.Box(widgets.St{Width: 120}, steps)),
+		widgets.Col(widgets.St{Gap: 6, Width: -1}, label(tr("Maximum steps")), widgets.Text(tr("How many model calls the agent may make for one task. Leave it blank for no limit; the token budget still applies."), theme.SizeCaption, theme.T.Muted), giode.Box(widgets.St{Width: 120}, steps)),
 		widgets.Col(widgets.St{Gap: 6, Width: -1}, label(tr("Token budget (thousands)")), widgets.Text(tr("The agent pauses once a task has used this many tokens; Continue resumes it."), theme.SizeCaption, theme.T.Muted), giode.Box(widgets.St{Width: 120}, budget)),
 		widgets.Col(widgets.St{Gap: 0, Width: -1}, widgets.SectionLabel(tr("Tools")), widgets.Group(toolRows...)),
 		widgets.Group(widgets.ListRow(k+"auto", "shield-check", theme.T.Warning, tr("Run without asking"), tr("Skip approval for actions like deleting files and MCP writes"), widgets.Toggle(k+"autot", ag.AutoApprove, func(v bool) {
@@ -155,4 +158,12 @@ func (a *App) agentEditorBody(ag *store.Agent) widgets.El {
 		a.newChat(store.ModeAgent, ag.ID)
 	}, widgets.St{Width: -1}))
 	return widgets.Col(widgets.St{Gap: 18, Width: -1}, kids...)
+}
+
+// stepsText is the step limit's field text: blank for no limit.
+func stepsText(n int) string {
+	if n <= 0 {
+		return ""
+	}
+	return strconv.Itoa(n)
 }

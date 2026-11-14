@@ -1,15 +1,16 @@
 package ui
 
 import (
+	"cmp"
 	"fmt"
 	"strconv"
 	"strings"
 
-	"github.com/xmhrnx/giode"
-	"github.com/xmhrnx/giode/components/input"
 	"github.com/mehran9675/pocket-agent/internal/local"
 	"github.com/mehran9675/pocket-agent/internal/ui/theme"
 	"github.com/mehran9675/pocket-agent/internal/ui/widgets"
+	"github.com/xmhrnx/giode"
+	"github.com/xmhrnx/giode/components/input"
 )
 
 var repeatWindows = []int{0, 64, 128, 256, 512, 1024, -1}
@@ -84,9 +85,18 @@ func (a *App) samplingBody() widgets.El {
 					ls.Temperature = v
 					save()
 				}),
-			widgets.SliderRow("samp/max", tr("Maximum reply length"), "", float64(ls.MaxTokens), 256, 16384, 256,
-				func(v float64) string { return fmt.Sprintf(tr("%.0f tokens"), v) }, func(v float64) {
+			// The slider's last stop, past 16384, is no limit (0).
+			widgets.SliderRow("samp/max", tr("Maximum reply length"), "", float64(cmp.Or(ls.MaxTokens, noReplyLimit)), 256, noReplyLimit, 256,
+				func(v float64) string {
+					if v >= noReplyLimit {
+						return tr("No limit")
+					}
+					return fmt.Sprintf(tr("%.0f tokens"), v)
+				}, func(v float64) {
 					ls.MaxTokens = int(v)
+					if v >= noReplyLimit {
+						ls.MaxTokens = 0
+					}
 					save()
 				}),
 			widgets.Row(widgets.St{Width: -1, Gap: 12},
@@ -117,10 +127,13 @@ func (a *App) samplingBody() widgets.El {
 		),
 		widgets.Button("samp/reset", tr("Reset to defaults"), "rotate-ccw", widgets.BtnSecondary, func() {
 			ls.Sampling = local.DefaultGenParams()
-			ls.Temperature, ls.MaxTokens = 0.7, 2048
+			ls.Temperature, ls.MaxTokens = 0.7, 0
 			seed.SetText("")
 			save()
 			a.toast(giode.ToastInfo, tr("Sampling reset"))
 		}, widgets.St{Width: -1}),
 	)
 }
+
+// noReplyLimit is the reply length slider's "no limit" stop.
+const noReplyLimit = 16384 + 256

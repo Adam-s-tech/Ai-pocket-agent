@@ -148,6 +148,7 @@ func (s *Store) LoadSettings() *Settings {
 	if err := readJSON(s.settingsPath(), st); err != nil {
 		st = DefaultSettings()
 	}
+	st.upgrade()
 	if st.AutoApprove == nil {
 		st.AutoApprove = map[string]bool{}
 	}

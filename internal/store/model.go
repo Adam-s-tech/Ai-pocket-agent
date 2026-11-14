@@ -355,9 +355,7 @@ func (l LocalSettings) LoadOptions() local.LoadOptions {
 func (l LocalSettings) GenParams() local.GenParams {
 	g := l.Sampling
 	g.Temperature = float32(l.Temperature)
-	if l.MaxTokens > 0 {
-		g.MaxTokens = l.MaxTokens
-	}
+	g.MaxTokens = l.MaxTokens // 0: until the context window fills
 	return g
 }
 
@@ -392,6 +390,8 @@ type Settings struct {
 	Compression Compression `json:"compression"`
 	// Prompts are rewritten system prompts by ID; see agent.PromptDefs.
 	Prompts map[string]string `json:"prompts,omitempty"`
+	// Version counts the one-time upgrades applied to saved settings.
+	Version int `json:"version,omitempty"`
 	// Language is the UI locale, "" for the system's.
 	Language string `json:"language,omitempty"`
 }
@@ -404,10 +404,11 @@ func DefaultSettings() *Settings {
 		Search:        tools.SearchConfig{Engine: tools.SearchDuckDuckGo},
 		ChatTools:     []string{"calculator", "current_datetime", "run_javascript", "read_attachment", "remember", "forget"},
 		AutoApprove:   map[string]bool{},
+		Version:       settingsVersion,
 		Compression:   Compression{Enabled: true, CloudLimit: DefaultCloudLimit},
 		MemoryEnabled: true,
 		ShowReasoning: true,
-		Local:         LocalSettings{ContextSize: 4096, GPULayers: -1, Temperature: 0.7, MaxTokens: 2048, Sampling: local.DefaultGenParams()},
+		Local:         LocalSettings{ContextSize: 4096, GPULayers: -1, Temperature: 0.7, MaxTokens: 0, Sampling: local.DefaultGenParams()},
 	}
 }
 
@@ -508,4 +509,19 @@ func (c Compression) Local(window int) int {
 		return auto
 	}
 	return n
+}
+
+// settingsVersion is the current Settings.Version.
+const settingsVersion = 2
+
+// upgrade applies the one-time changes to settings saved by older
+// versions.
+func (s *Settings) upgrade() {
+	if s.Version < 2 {
+		// Replies had a 2048-token default; now they run until done.
+		if s.Local.MaxTokens == 2048 {
+			s.Local.MaxTokens = 0
+		}
+	}
+	s.Version = settingsVersion
 }
