@@ -224,8 +224,8 @@ func (a *App) mediaCard(key, kind, src, alt, dir string) widgets.El {
 }
 
 // openMedia plays video or audio in another app: a link opens in the
-// system's handler for it; a workspace file goes through the share
-// sheet, where players are offered.
+// system's handler for it, a workspace file in the app the system picks
+// for its type.
 func (a *App) openMedia(src, dir string) {
 	if strings.HasPrefix(src, "http://") || strings.HasPrefix(src, "https://") {
 		a.openLink(src)
@@ -236,7 +236,16 @@ func (a *App) openMedia(src, dir string) {
 		a.toast(giode.ToastError, tr("This file no longer exists."))
 		return
 	}
-	a.shareFile(p, mimeOf(p))
+	a.openFile(p)
+}
+
+// openFile opens a file in the app the system picks for its type.
+func (a *App) openFile(path string) {
+	go func() {
+		if err := a.win.OpenWith(context.Background(), path); err != nil && !errors.Is(err, giode.ErrCanceled) {
+			a.toast(giode.ToastError, tr("Couldn't open it: {error}", "error", err))
+		}
+	}()
 }
 
 // openViewer shows an image full screen, zoomable.

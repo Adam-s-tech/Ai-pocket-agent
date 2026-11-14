@@ -166,7 +166,7 @@ func (a *App) termInput(tab *termTab) widgets.El {
 	k := fmt.Sprintf("term/in/%d", tab.id)
 	in, ok := a.inputs[k]
 	if !ok {
-		in = a.input(k, tr("Type here; Enter sends"), "", func(i *input.Input) { i.Keyboard(giode.KeyboardURL) })
+		in = a.input(k, tr("Type here; Enter sends"), "", func(i *input.Input) { i.Autocorrect(false) })
 		in.OnChange(func(text string) { a.termTyped(tab, text) })
 		in.Submit(func(string) {
 			t.SendKey(uv.KeyEnter, 0)

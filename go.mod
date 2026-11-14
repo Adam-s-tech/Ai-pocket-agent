@@ -11,7 +11,7 @@ require (
 	github.com/creack/pty v1.1.24
 	github.com/dop251/goja v0.0.0-20261026132650-6b6a90e51946
 	github.com/ledongthuc/pdf v0.0.0-20261020125853-5e46805f718e
-	github.com/xmhrnx/giode v1.0.22-alpha.1
+	github.com/xmhrnx/giode v1.0.23-alpha.1.0.20261114181206-e163f9a59e50
 	golang.org/x/crypto v0.59.0
 	golang.org/x/image v0.48.0
 	golang.org/x/net v0.62.0

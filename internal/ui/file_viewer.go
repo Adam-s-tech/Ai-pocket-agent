@@ -27,6 +27,7 @@ func (a *App) fileViewer(spec string, compact bool) widgets.El {
 				a.copyText(string(b))
 			}
 		}),
+		widgets.IconButton("fv/open", "external-link", tr("Open in another app"), 18, theme.T.Text2, func() { a.openFile(full) }),
 		widgets.IconButton("fv/share", "share", tr("Share"), 18, theme.T.Text2, func() { a.shareFile(full, mimeOf(rel)) }),
 	)
 	return a.pageScaffold("file/"+spec, lastPathElem(rel), compact, actions, func() widgets.El {
@@ -46,7 +47,8 @@ func (a *App) fileViewer(spec string, compact bool) widgets.El {
 		info := fmt.Sprintf(tr("%s · %s"), rel, tools.HumanBytes(int64(len(b))))
 		var body widgets.El
 		if strings.HasSuffix(strings.ToLower(rel), ".md") {
-			body = giode.SelectionArea("file/"+spec, a.markdown("file/"+spec, string(b)))
+			dir := filepath.Dir(full)
+			body = giode.SelectionArea("file/"+spec, a.markdownDoc("file/"+spec, string(b), dir))
 		} else {
 			body = giode.Box(widgets.St{Width: -1, Padding: giode.UniformInset(14), BorderRadius: 12, Background: theme.T.CodeBg, BorderWidth: 1, BorderColor: theme.T.CodeBorder},
 				widgets.CodeText("file/"+spec, string(b), 13, theme.T.Text))

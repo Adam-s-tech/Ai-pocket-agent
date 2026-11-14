@@ -57,7 +57,7 @@ func (a *App) assistantRows(c *store.Conversation, m *store.Message, last bool) 
 					key := fmt.Sprintf("t%d/%d/%d", i, j, k)
 					switch part.kind {
 					case "":
-						addText(key, textToken(part.text)+a.textEnv(), func() widgets.El { return a.markdownChunk(m.ID+"/"+key, part.text, size) })
+						addText(key, textToken(part.text)+a.textEnv(), func() widgets.El { return a.markdownIn(m.ID+"/"+key, part.text, size, dir) })
 					case "image":
 						it := a.image(part.src, dir)
 						add(key, part.src+it.state(&a.images), func() widgets.El { return a.chatImage(m.ID+"/"+key, part.src, part.alt, dir) })

@@ -89,7 +89,7 @@ jobs:
         with:
           packages: 'platforms;android-35 build-tools;35.0.0 ndk;27.0.12077973'
       - name: Install the giode CLI
-        run: go install github.com/xmhrnx/giode-cli/cmd/giode@a6480f7fde39250be94deaa82b902d16849f745e
+        run: go install github.com/xmhrnx/giode-cli/cmd/giode@a9f7b7c623a0068a62fe71464817373bd2520379
       - name: Use the release tag as the app version
         run: |
           TAG_VERSION=$(echo "${{ github.ref_name }}" | sed -E 's/^v//')
@@ -135,7 +135,7 @@ jobs:
           go-version-file: go.mod
           cache: true
       - name: Install the giode CLI
-        run: go install github.com/xmhrnx/giode-cli/cmd/giode@a6480f7fde39250be94deaa82b902d16849f745e
+        run: go install github.com/xmhrnx/giode-cli/cmd/giode@a9f7b7c623a0068a62fe71464817373bd2520379
       - name: Use the release tag as the app version
         run: |
           TAG_VERSION=$(echo "${{ github.ref_name }}" | sed -E 's/^v//')
