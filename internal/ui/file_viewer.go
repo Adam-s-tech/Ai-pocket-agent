@@ -30,6 +30,12 @@ func (a *App) fileViewer(spec string, compact bool) widgets.El {
 		widgets.IconButton("fv/share", "share", tr("Share"), 18, theme.T.Text2, func() { a.shareFile(full, mimeOf(rel)) }),
 	)
 	return a.pageScaffold("file/"+spec, lastPathElem(rel), compact, actions, func() widgets.El {
+		switch kind := mediaKind(rel); kind {
+		case "image":
+			return a.chatImage("fv/img/"+spec, rel, "", a.st.Workspace(convID))
+		case "video", "audio":
+			return a.mediaCard("fv/media/"+spec, kind, rel, "", a.st.Workspace(convID))
+		}
 		b, err := os.ReadFile(full)
 		if err != nil {
 			return widgets.Text(tr("This file no longer exists."), theme.SizeBody, theme.T.Muted)

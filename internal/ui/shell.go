@@ -78,6 +78,8 @@ func (a *App) pageView(route string, compact bool) widgets.El {
 		return a.libraryPage(compact)
 	case "file":
 		return a.fileViewer(strings.TrimPrefix(route, "file/"), compact)
+	case "viewer":
+		return a.imageViewer(compact)
 	}
 	return a.chat.view(compact)
 }

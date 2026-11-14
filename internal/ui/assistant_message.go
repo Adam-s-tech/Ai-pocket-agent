@@ -46,9 +46,25 @@ func (a *App) assistantRows(c *store.Conversation, m *store.Message, last bool) 
 		case store.BlockReasoning:
 			a.reasoningRows(m, i, b.Text, m.Streaming && i == len(m.Blocks)-1, add, addText)
 		case store.BlockText:
+			// Images, video and audio on lines of their own show as
+			// media; files they name are in the conversation's workspace.
+			dir := ""
+			if c.Mode == store.ModeAgent {
+				dir = a.st.Workspace(c.ID)
+			}
 			for j, chunk := range splitMarkdown(b.Text, chunkSize) {
-				key := fmt.Sprintf("t%d/%d", i, j)
-				addText(key, textToken(chunk)+a.textEnv(), func() widgets.El { return a.markdownChunk(m.ID+"/"+key, chunk, size) })
+				for k, part := range splitMedia(chunk) {
+					key := fmt.Sprintf("t%d/%d/%d", i, j, k)
+					switch part.kind {
+					case "":
+						addText(key, textToken(part.text)+a.textEnv(), func() widgets.El { return a.markdownChunk(m.ID+"/"+key, part.text, size) })
+					case "image":
+						it := a.image(part.src, dir)
+						add(key, part.src+it.state(&a.images), func() widgets.El { return a.chatImage(m.ID+"/"+key, part.src, part.alt, dir) })
+					default:
+						add(key, part.src, func() widgets.El { return a.mediaCard(m.ID+"/"+key, part.kind, part.src, part.alt, dir) })
+					}
+				}
 			}
 		case store.BlockTool:
 			start := i

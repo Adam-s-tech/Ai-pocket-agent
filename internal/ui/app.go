@@ -14,17 +14,19 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/xmhrnx/giode"
-	"github.com/xmhrnx/giode/components/drawer"
-	"github.com/xmhrnx/giode/components/input"
-	"github.com/xmhrnx/giode/components/scroll"
-	"github.com/xmhrnx/giode/components/sheet"
+	"github.com/xmhrnx/giode/components/zoom"
+
 	"github.com/mehran9675/pocket-agent/internal/local"
 	"github.com/mehran9675/pocket-agent/internal/skills"
 	"github.com/mehran9675/pocket-agent/internal/store"
 	"github.com/mehran9675/pocket-agent/internal/tools"
 	"github.com/mehran9675/pocket-agent/internal/ui/theme"
 	"github.com/mehran9675/pocket-agent/internal/ui/widgets"
+	"github.com/xmhrnx/giode"
+	"github.com/xmhrnx/giode/components/drawer"
+	"github.com/xmhrnx/giode/components/input"
+	"github.com/xmhrnx/giode/components/scroll"
+	"github.com/xmhrnx/giode/components/sheet"
 )
 
 // Version is the app version shown in About.
@@ -62,6 +64,13 @@ type App struct {
 	mcpStatus map[string]string
 
 	skills *skills.Library
+
+	// images caches the pictures shown in replies and the viewer.
+	images imageCache
+	// viewer is the image the full-screen viewer shows; viewerZoom its
+	// pinch-zoom state.
+	viewer     viewerState
+	viewerZoom *zoom.Zoom
 
 	// pickerProvider is the provider whose full model list the model
 	// picker shows; "" for the overview.
