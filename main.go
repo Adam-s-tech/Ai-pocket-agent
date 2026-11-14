@@ -13,6 +13,7 @@ import (
 	"gioui.org/app"
 	_ "gioui.org/app/permission/microphone" // dictation on Android
 	_ "github.com/xmhrnx/giode/dictate"     // speech to text, for the composer's mic
+	_ "github.com/xmhrnx/giode/takephoto"   // the camera, for "Take a photo"
 
 	"github.com/xmhrnx/giode"
 
