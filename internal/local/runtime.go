@@ -18,7 +18,7 @@ import (
 )
 
 // DefaultManifestURL lists the engine builds of the latest release.
-const DefaultManifestURL = "https://github.com/Mehran9675/pocket-agent/releases/latest/download/engine-manifest.json"
+const DefaultManifestURL = "https://github.com/xmhrnx/pocket-agent/releases/latest/download/engine-manifest.json"
 
 // Manifest describes the published engine builds.
 type Manifest struct {

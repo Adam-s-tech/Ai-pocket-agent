@@ -95,7 +95,7 @@ var Presets = []Preset{
 	{
 		ID: "openrouter", Name: "OpenRouter", Kind: KindOpenAI, BaseURL: "https://openrouter.ai/api/v1", Group: GroupPlatforms,
 		KeyHint: "openrouter.ai → Keys", Thinking: ThinkingOpenRouter,
-		Headers: map[string]string{"HTTP-Referer": "https://github.com/mehran9675/pocket-agent", "X-Title": "Pocket Agent"},
+		Headers: map[string]string{"HTTP-Referer": "https://github.com/xmhrnx/pocket-agent", "X-Title": "Pocket Agent"},
 	},
 	{ID: "deepinfra", Name: "DeepInfra", Kind: KindOpenAI, BaseURL: "https://api.deepinfra.com/v1/openai", Group: GroupPlatforms, KeyHint: "deepinfra.com → Dashboard → API Keys", Thinking: ThinkingEffort},
 	{ID: "together", Name: "Together AI", Kind: KindOpenAI, BaseURL: "https://api.together.ai/v1", Group: GroupPlatforms, KeyHint: "api.together.ai → Settings → API Keys"},
