@@ -4,3 +4,6 @@ build/
 *.ipa
 *.app
 *.bundle
+release.keystore
+*.keystore
+*.jks

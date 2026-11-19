@@ -1,6 +1,8 @@
 # Packaging for the giode CLI (github.com/xmhrnx/giode-cli): `giode build android`,
 # `giode run android`, ... scripts/giode-build.sh sets the per-build values (version,
 # build tags, signing files) for one build; see docs/building.md.
+# The release workflow (.github/workflows/ci.yml) is written by hand, not by `giode ci`:
+# it builds the on-device engine first. Store setup is in RELEASING.md.
 
 [app]
 name = "Pocket Agent"
@@ -19,6 +21,8 @@ publisher = "Mehran"
 description = "Private AI chat, research and agents - on-device or with the cloud models you choose."
 website = "https://xmhrnx.github.io/pocket-agent/"
 output = "build"
+# A phone and tablet app: Google Play (AAB) and the App Store (IPA). No desktop stores.
+platforms = ["android", "ios"]
 
 [android]
 # Adaptive icon layers and the themed-icon silhouette, drawn by scripts/appicon.py.
@@ -26,19 +30,38 @@ icon_foreground = "assets/android-foreground.png"
 icon_background = "assets/android-background.png"
 icon_monochrome = "assets/android-monochrome.png"
 min_sdk = 28
-target_sdk = 35
+target_sdk = 36   # Google Play requires Android 16 (API 36) for new apps and updates since 31 Aug 2026
+# Gio's activity handles back in onBackPressed(), which Android 16 no longer calls for apps
+# targeting 36 (predictive back): without this opt-out the back gesture closes the app.
+application_attributes = { enableOnBackInvokedCallback = "false" }
 arch = ["arm64"]
 # microphone: dictation; vibrate: haptics. No camera permission: photos come from the
 # system camera app, which Android refuses to an app declaring CAMERA without holding it.
 permissions = ["network", "networkstate", "microphone", "vibrate"]
 # The foreground service behind App.KeepAlive, so agent runs finish when the app leaves the screen.
 keep_alive = true
+# App.Notify: a background reply finished, or an agent waits for approval.
 notifications = true
+# Created by `giode keystore` (gitignored); giode build -release signs with it. CI writes it
+# from ANDROID_KEYSTORE_BASE64 (password: GIODE_KEYSTORE_PASS). With Play App Signing it's
+# the upload key. Google Play builds (make aab) package the engine: see RELEASING.md.
+keystore = "release.keystore"
 
 [ios]
 min_os = 15
+# The icon is app.icon (assets/appicon.png): opaque and full-bleed, iOS rounds the corners.
 
 [ios.usage]
 camera = "Pocket Agent uses the camera to attach photos you take to a message."
 microphone = "Pocket Agent uses the microphone so you can dictate messages."
 speech = "Pocket Agent turns your speech into text so you can dictate messages."
+
+[ios.plist]
+# HTTPS (the OS's and Go's TLS) and SSH use standard algorithms only: no export
+# documentation needed, as for EasySend and GoCode.
+ITSAppUsesNonExemptEncryption = false
+
+[privacy]                         # PrivacyInfo.xcprivacy for the App Store
+# Nothing reaches the developer: chats go only to the providers the user sets up,
+# and are stored on the device (see the website's #privacy). So no [[privacy.collected]].
+tracking = false
