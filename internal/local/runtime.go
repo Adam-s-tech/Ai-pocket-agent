@@ -45,7 +45,8 @@ type RuntimeStatus struct {
 	// Supported is false where no engine can run: iOS builds without
 	// the engine linked in, and platforms with no published build.
 	Supported bool
-	// Builtin is set when the engine is part of the app (iOS).
+	// Builtin is set when the engine is part of the app (iOS, and
+	// Google Play builds on Android).
 	Builtin bool
 	// Installed is the installed version, "" if none.
 	Installed string
@@ -86,7 +87,7 @@ type installedEngine struct {
 // Runtime manages the on-device engine library: on Android and
 // desktops it is downloaded from the app's releases, verified,
 // installed under dir and updated when a new build is published; on
-// iOS it is part of the app.
+// iOS and in Google Play builds it is part of the app.
 type Runtime struct {
 	dir         string
 	manifestURL string
@@ -182,12 +183,16 @@ func (r *Runtime) Problem() string {
 	}
 }
 
-// LibraryPath is the installed engine library, "" if none.
+// LibraryPath is the installed engine library, "" if none (or when
+// it's linked in).
 func (r *Runtime) LibraryPath() string {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	if r.local != "" {
 		return r.local
+	}
+	if builtinEngine {
+		return packagedLibrary()
 	}
 	if r.current.Version == "" {
 		return ""

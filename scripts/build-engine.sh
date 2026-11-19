@@ -48,6 +48,7 @@ android)
 	build "$ROOT/build/engine-android-$VARIANT" "libpocketllama-android-arm64-$VARIANT.so" \
 		-DCMAKE_TOOLCHAIN_FILE="$NDK/build/cmake/android.toolchain.cmake" \
 		-DANDROID_ABI=arm64-v8a -DANDROID_PLATFORM=android-28 -DANDROID_STL=c++_static \
+		-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON \
 		-DGGML_CPU_ARM_ARCH="$ARCH"
 	"$NDK"/toolchains/llvm/prebuilt/*/bin/llvm-strip "$OUT/libpocketllama-android-arm64-$VARIANT.so"
 	;;

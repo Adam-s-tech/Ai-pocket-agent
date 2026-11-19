@@ -8,6 +8,9 @@ package local
 */
 import "C"
 
-// builtinEngine is set when the engine is linked into the app (iOS,
-// built with -tags llama) rather than downloaded.
+// builtinEngine is set when the engine comes with the app rather than
+// being downloaded: here it's linked in (iOS, built with -tags llama).
 const builtinEngine = true
+
+// packagedLibrary is "": the linked-in engine needs no library.
+func packagedLibrary() string { return "" }

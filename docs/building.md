@@ -85,8 +85,10 @@ scripts/engine-manifest.sh https://example.com/files > engine-manifest.json
 `scripts/llama-src.sh` pins the llama.cpp commit (`LLAMA_COMMIT`). An engine's version is that
 commit plus a hash of `engine/`, so apps update exactly when the engine changes. The release
 workflow builds every variant, writes the manifest and attaches them all to the release. Note
-that Google Play doesn't allow apps to download native code; this suits builds distributed
-through GitHub releases.
+that Google Play doesn't allow apps to download native code, so the Play bundle packages it
+instead: `make engine-android && make aab` packs both CPU variants into the app
+(`scripts/engine-aar.sh`) and builds with `-tags play`, which loads the packaged engine and
+never downloads one. See RELEASING.md.
 
 **iOS** can't load downloaded code, so the engine is compiled into the app:
 

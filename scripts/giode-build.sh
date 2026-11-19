@@ -10,6 +10,8 @@
 #                    builds with -release when set
 #   SHARE_PROFILE=.. iOS share extension's provisioning profile; signed iOS
 #                    builds without one leave out the share target
+#   ENGINE_AAR=...   Android: the engine packed by scripts/engine-aar.sh, built
+#                    in with -tags play (Google Play doesn't allow downloading it)
 #
 # In GitHub Actions a failed build's output is also reported as an error
 # annotation, readable on the run's summary.
@@ -47,8 +49,12 @@ if re.fullmatch(r"\d+\.\d+\.\d+\.\d+", v):
     put("app", "build", build)
 if os.environ.get("APPID"):
     put("app", "id", q(os.environ["APPID"]))
-if os.environ.get("TAGS"):
-    put("app", "tags", q(os.environ["TAGS"]))
+tags = os.environ.get("TAGS", "").split()
+if os.environ.get("ENGINE_AAR"):
+    tags.append("play")
+    put("android", "libraries", "[" + q(os.path.abspath(os.environ["ENGINE_AAR"])) + "]")
+if tags:
+    put("app", "tags", q(" ".join(tags)))
 if os.environ.get("PROFILE"):
     put("ios", "profile", q(os.path.abspath(os.environ["PROFILE"])))
     # The share extension is signed with its own profile.

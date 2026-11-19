@@ -15,7 +15,7 @@ TAGS := $(strip $(if $(LLAMA),llama,) $(GOTAGS))
 # A locally built engine for desktop runs (make engine).
 HOST_ENGINE = $(firstword $(wildcard $(OUT)/engine/libpocketllama-linux-*.so $(OUT)/engine/libpocketllama-darwin-*.dylib))
 
-.PHONY: run dev test vet desktop android ios ios-sim clean engine engine-android llama-ios
+.PHONY: run dev test vet desktop android aab ios ios-sim clean engine engine-android llama-ios
 
 run:            ## run on the desktop
 	POCKET_AGENT_ENGINE=$(HOST_ENGINE) go run .
@@ -38,6 +38,12 @@ android:        ## APK for arm64 phones and tablets (Android 9+); SIGNKEY/SIGNPA
 	mkdir -p $(OUT)
 	VERSION=$(VERSION) TAGS="$(TAGS)" KEYSTORE=$(SIGNKEY) GIODE_KEYSTORE_PASS="$(SIGNPASS)" \
 		scripts/giode-build.sh -o $(OUT)/pocket-agent.apk android
+
+aab:            ## Google Play bundle with the engine built in (make engine-android first); SIGNKEY/SIGNPASS
+	mkdir -p $(OUT)
+	scripts/engine-aar.sh
+	VERSION=$(VERSION) TAGS="$(TAGS)" KEYSTORE=$(SIGNKEY) GIODE_KEYSTORE_PASS="$(SIGNPASS)" \
+		ENGINE_AAR=$(OUT)/engine/pocketllama-play.aar scripts/giode-build.sh -o $(OUT)/pocket-agent.aab aab
 
 ios:            ## universal iPhone + iPad app; SIGNKEY = provisioning profile, SHAREKEY = the share extension's
 	mkdir -p $(OUT)
