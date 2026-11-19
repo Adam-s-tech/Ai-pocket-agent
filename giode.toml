@@ -17,7 +17,7 @@ splash_color_light = "#0C0D10"
 share_target = true
 publisher = "Mehran"
 description = "Private AI chat, research and agents - on-device or with the cloud models you choose."
-website = "https://github.com/Mehran9675/pocket-agent"
+website = "https://xmhrnx.github.io/pocket-agent/"
 output = "build"
 
 [android]
