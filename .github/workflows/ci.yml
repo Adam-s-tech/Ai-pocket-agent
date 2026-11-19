@@ -1,17 +1,25 @@
 name: Release
 
-# Builds the project and attaches the files to the published GitHub release:
-# Packaging uses the giode CLI with giode.toml (manifest entries, Info.plist texts).
-#   - Android APK (arm64, Android 9+), signed with a release keystore when
-#     ANDROID_KEYSTORE_BASE64/ANDROID_KEYSTORE_PASS secrets are set, otherwise
-#     with the debug keystore
+# Builds the project and attaches the files to the published GitHub release.
+# Packaging uses the giode CLI with giode.toml (manifest entries, Info.plist
+# texts). Written by hand rather than by `giode ci`, because the on-device
+# engine is built first; the secrets have the names giode ci's workflows use.
+# RELEASING.md says where each file goes and how to set the secrets up.
+#   - Android APK (arm64, Android 9+) for GitHub, which downloads the engine,
+#     and a Google Play bundle (.aab) with the engine packaged in (Play doesn't
+#     allow downloading native code). Signed with the release keystore when
+#     ANDROID_KEYSTORE_BASE64 and GIODE_KEYSTORE_PASS are set, otherwise with
+#     the debug key (which Play refuses)
 #   - the on-device engine for Android (two CPU variants) and Linux, plus
-#     engine-manifest.json, which installed apps check at launch to download
+#     engine-manifest.json, which GitHub installs check at launch to download
 #     the engine and its updates
-#   - iOS/iPadOS .ipa with the engine compiled in, signed when the Apple
-#     signing secrets are set (APPLE_CERTIFICATE_BASE64,
-#     APPLE_CERTIFICATE_PASSWORD, APPLE_PROVISION_PROFILE_BASE64,
-#     KEYCHAIN_PASSWORD), otherwise a simulator build is attached instead
+#   - iOS/iPadOS .ipa for the App Store with the engine compiled in, signed
+#     when IOS_CERT_BASE64, IOS_CERT_PASS and IOS_PROFILE_BASE64 are set (the
+#     share extension also needs IOS_SHARE_PROFILE_BASE64), otherwise a
+#     simulator build is attached instead
+# Use three-part tags (v1.2.0): the build number (Android versionCode,
+# CFBundleVersion) is then this workflow's run number, which every store
+# upload needs raised. A four-part tag (v1.2.0.7) sets it explicitly.
 on:
   release:
     types: [published]
@@ -73,7 +81,7 @@ jobs:
           if-no-files-found: error
 
   android:
-    needs: test
+    needs: [test, engine]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -87,7 +95,7 @@ jobs:
           java-version: '17'
       - uses: android-actions/setup-android@v3
         with:
-          packages: 'platforms;android-35 build-tools;35.0.0 ndk;27.0.12077973'
+          packages: 'platforms;android-36 build-tools;36.0.0 ndk;27.0.12077973'
       - name: Install the giode CLI
         run: go install github.com/xmhrnx/giode-cli/cmd/giode@v0.1.35-alpha.1
       - name: Use the release tag as the app version
@@ -95,39 +103,57 @@ jobs:
           TAG_VERSION=$(echo "${{ github.ref_name }}" | sed -E 's/^v//')
           if echo "$TAG_VERSION" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$'; then
             echo "VERSION=$TAG_VERSION" >> "$GITHUB_ENV"
+          elif echo "$TAG_VERSION" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "VERSION=$TAG_VERSION.${{ github.run_number }}" >> "$GITHUB_ENV"
           fi
       - name: Point the build at the Android SDK and NDK
         run: |
           SDK="${ANDROID_SDK_ROOT:-$ANDROID_HOME}"
           echo "ANDROID_HOME=$SDK" >> "$GITHUB_ENV"
           echo "ANDROID_NDK_ROOT=$SDK/ndk/27.0.12077973" >> "$GITHUB_ENV"
-      - name: Detect signing keystore
-        id: signing
+      - name: Engine builds for the Play bundle
+        uses: actions/download-artifact@v4
+        with:
+          pattern: engine-android-*
+          path: build/engine
+          merge-multiple: true
+      - name: Signing keystore
         env:
-          HAS_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' }}
-        run: echo "has=$HAS_KEYSTORE" >> "$GITHUB_OUTPUT"
-      - name: Decode signing keystore
-        if: steps.signing.outputs.has == 'true'
-        run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > "$RUNNER_TEMP/release.keystore"
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          GIODE_KEYSTORE_PASS: ${{ secrets.GIODE_KEYSTORE_PASS }}
+        run: |
+          # android.keystore in giode.toml; signed when the repository has it.
+          if [ -n "$ANDROID_KEYSTORE_BASE64" ] && [ -n "$GIODE_KEYSTORE_PASS" ]; then
+            echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > release.keystore
+            echo "SIGNKEY=release.keystore" >> "$GITHUB_ENV"
+          fi
       - name: Build APK
         env:
-          KEYSTORE_PASS: ${{ secrets.ANDROID_KEYSTORE_PASS }}
-        run: |
-          if [ "${{ steps.signing.outputs.has }}" = "true" ]; then
-            make android SIGNKEY="$RUNNER_TEMP/release.keystore" SIGNPASS="$KEYSTORE_PASS"
-          else
-            make android
-          fi
-      - name: Upload APK
+          SIGNPASS: ${{ secrets.GIODE_KEYSTORE_PASS }}
+        run: make android SIGNKEY="$SIGNKEY" SIGNPASS="$SIGNPASS"
+      - name: Build the Google Play bundle
+        env:
+          SIGNPASS: ${{ secrets.GIODE_KEYSTORE_PASS }}
+        run: make aab SIGNKEY="$SIGNKEY" SIGNPASS="$SIGNPASS"
+      - name: Upload APK and bundle
         uses: actions/upload-artifact@v4
         with:
           name: android
-          path: build/pocket-agent.apk
-          if-no-files-found: error
+          path: |
+            build/pocket-agent.apk
+            build/pocket-agent.aab
+            build/native-debug-symbols.zip
+          if-no-files-found: warn
 
   ios:
     needs: test
     runs-on: macos-latest
+    # A hung signing step fails in an hour rather than GitHub's six.
+    timeout-minutes: 60
+    env:
+      IOS_CERT_BASE64: ${{ secrets.IOS_CERT_BASE64 }}
+      IOS_PROFILE_BASE64: ${{ secrets.IOS_PROFILE_BASE64 }}
+      IOS_SHARE_PROFILE_BASE64: ${{ secrets.IOS_SHARE_PROFILE_BASE64 }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
@@ -141,30 +167,31 @@ jobs:
           TAG_VERSION=$(echo "${{ github.ref_name }}" | sed -E 's/^v//')
           if echo "$TAG_VERSION" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$'; then
             echo "VERSION=$TAG_VERSION" >> "$GITHUB_ENV"
+          elif echo "$TAG_VERSION" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "VERSION=$TAG_VERSION.${{ github.run_number }}" >> "$GITHUB_ENV"
           fi
-      - name: Detect Apple signing
+      - name: Signing certificate and profiles
         id: signing
+        if: env.IOS_CERT_BASE64 != '' && env.IOS_PROFILE_BASE64 != ''
         env:
-          HAS_SIGNING: ${{ secrets.APPLE_CERTIFICATE_BASE64 != '' && secrets.APPLE_CERTIFICATE_PASSWORD != '' && secrets.APPLE_PROVISION_PROFILE_BASE64 != '' && secrets.KEYCHAIN_PASSWORD != '' }}
-        run: echo "has=$HAS_SIGNING" >> "$GITHUB_OUTPUT"
-      - name: Import signing certificate and profile
-        if: steps.signing.outputs.has == 'true'
-        env:
-          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+          IOS_CERT_PASS: ${{ secrets.IOS_CERT_PASS }}
         run: |
-          CERT_PATH="$RUNNER_TEMP/cert.p12"
-          PROFILE_PATH="$RUNNER_TEMP/profile.mobileprovision"
-          echo "${{ secrets.APPLE_CERTIFICATE_BASE64 }}" | base64 --decode > "$CERT_PATH"
-          echo "${{ secrets.APPLE_PROVISION_PROFILE_BASE64 }}" | base64 --decode > "$PROFILE_PATH"
-          # Optional: the share extension's profile; without it the app isn't a share target on iOS.
-          if [ -n "${{ secrets.APPLE_SHARE_PROFILE_BASE64 }}" ]; then
-            echo "${{ secrets.APPLE_SHARE_PROFILE_BASE64 }}" | base64 --decode > "$RUNNER_TEMP/share.mobileprovision"
-          fi
-          security create-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
-          security unlock-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
+          echo "$IOS_CERT_BASE64" | base64 -d > cert.p12
+          security create-keychain -p ci build.keychain
           security default-keychain -s build.keychain
-          security import "$CERT_PATH" -k build.keychain -P "${{ secrets.APPLE_CERTIFICATE_PASSWORD }}" -T /usr/bin/codesign
-          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" build.keychain
+          security unlock-keychain -p ci build.keychain
+          security import cert.p12 -k build.keychain -P "$IOS_CERT_PASS" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: -s -k ci build.keychain
+          rm cert.p12
+          echo "$IOS_PROFILE_BASE64" | base64 -d > "$RUNNER_TEMP/app.mobileprovision"
+          # app.share_target: the share extension has its own profile; without
+          # it the app is built without the share extension.
+          if [ -n "$IOS_SHARE_PROFILE_BASE64" ]; then
+            echo "$IOS_SHARE_PROFILE_BASE64" | base64 -d > "$RUNNER_TEMP/share.mobileprovision"
+          else
+            echo "::warning::No IOS_SHARE_PROFILE_BASE64: the iOS app is built without its share extension"
+          fi
+          echo "has=true" >> "$GITHUB_OUTPUT"
       - name: Build the on-device engine (llama.cpp)
         if: steps.signing.outputs.has == 'true'
         run: scripts/build-llama.sh ios
@@ -172,14 +199,11 @@ jobs:
         if: steps.signing.outputs.has == 'true'
         env:
           LLAMA: 1
+          GIODE_IOS_TEAM_ID: ${{ secrets.IOS_TEAM_ID }}
         run: |
           SHARE=""
           [ -f "$RUNNER_TEMP/share.mobileprovision" ] && SHARE="$RUNNER_TEMP/share.mobileprovision"
-          if [ -n "${{ secrets.APPLE_APPID }}" ]; then
-            make ios SIGNKEY="$RUNNER_TEMP/profile.mobileprovision" SHAREKEY="$SHARE" APPID="${{ secrets.APPLE_APPID }}"
-          else
-            make ios SIGNKEY="$RUNNER_TEMP/profile.mobileprovision" SHAREKEY="$SHARE"
-          fi
+          make ios SIGNKEY="$RUNNER_TEMP/app.mobileprovision" SHAREKEY="$SHARE"
       - name: Build iOS simulator app
         if: steps.signing.outputs.has != 'true'
         run: make ios-sim
