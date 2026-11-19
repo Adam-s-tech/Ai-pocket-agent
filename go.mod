@@ -3,7 +3,7 @@ module github.com/mehran9675/pocket-agent
 go 1.26.6
 
 require (
-	gioui.org v0.10.3
+	gioui.org v0.10.2
 	github.com/anthropics/anthropic-sdk-go v1.84.0
 	github.com/charmbracelet/ultraviolet v0.0.0-20260303162955-0b88c25f3fff
 	github.com/charmbracelet/x/ansi v0.11.7
@@ -20,7 +20,7 @@ require (
 require (
 	fyne.io/systray v1.12.2 // indirect
 	gioui.org/shader v1.0.9 // indirect
-	gioui.org/x v0.10.3 // indirect
+	gioui.org/x v0.10.2 // indirect
 	git.sr.ht/~jackmordaunt/go-toast v1.0.0 // indirect
 	git.wow.st/gmp/jni v0.0.0-20210610011705-34026c7e22d0 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
