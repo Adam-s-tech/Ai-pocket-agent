@@ -4,6 +4,7 @@ A private AI workspace for **Android, iPhone and iPad**: chat with models runnin
 device or in the cloud, hand multi-step tasks to agents, and run deep research that reads
 dozens of sources and writes a cited report. Written in Go with
 [Giode](https://github.com/xmhrnx/giode) - one codebase, native rendering, no webview.
+Website: [xmhrnx.github.io/pocket-agent](https://xmhrnx.github.io/pocket-agent/).
 
 <p>
 <img src="docs/screenshots/phone-home.png" width="200" alt="New chat on a phone">

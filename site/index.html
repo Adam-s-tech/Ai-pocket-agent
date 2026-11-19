@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pocket Agent - private AI chat, research and agents</title>
+<meta name="description" content="Private AI chat, research and agents for Android, iPhone and iPad - on-device models with llama.cpp or the cloud models you choose.">
+<meta name="theme-color" content="#0c0d10">
+<link rel="icon" href="img/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0d10;
+  --sidebar: #101115;
+  --surface: #15171c;
+  --surface2: #1b1e24;
+  --border: #24272e;
+  --text: #eceef2;
+  --text2: #b4b9c3;
+  --muted: #7d8390;
+  --primary: #7c83ff;
+  --on-primary: #0b0c10;
+  --coral: #ff8a5c;
+  --amber: #ffbe5c;
+  --stitch: #ffc46e;
+  --denim: #3a5ea8;
+  --denim-dark: #284280;
+  --eye: #6ef0ff;
+  --success: #3ccf91;
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #ffffff;
+    --sidebar: #f7f7f8;
+    --surface: #f4f5f7;
+    --surface2: #eef0f3;
+    --border: #e4e6ea;
+    --text: #111318;
+    --text2: #3f4551;
+    --muted: #6e7480;
+    --primary: #4f46e5;
+    --on-primary: #ffffff;
+    --stitch: #e39a2e;
+    --eye: #0ea5c6;
+    --success: #16a34a;
+    color-scheme: light;
+  }
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.6 var(--sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img { max-width: 100%; display: block; }
+a { color: var(--primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.wrap { width: min(1120px, 100% - 40px); margin-inline: auto; }
+.mono { font-family: var(--mono); }
+
+/* top bar */
+.bar {
+  position: sticky; top: 0; z-index: 10;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.bar .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 16px; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--text); }
+.brand:hover { text-decoration: none; }
+.brand img { width: 30px; height: 30px; border-radius: 8px; }
+.bar nav { display: flex; gap: 22px; font-size: 14px; }
+.bar nav a { color: var(--text2); }
+.bar nav a:hover { color: var(--text); text-decoration: none; }
+
+/* hero */
+.hero { position: relative; padding: 84px 0 40px; overflow: hidden; }
+.hero::before {
+  content: ""; position: absolute; inset: -40% -10% auto auto; width: 720px; height: 720px;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--coral) 30%, transparent), transparent 70%);
+  pointer-events: none;
+}
+.hero::after {
+  content: ""; position: absolute; left: -200px; bottom: -260px; width: 620px; height: 620px;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--primary) 22%, transparent), transparent 70%);
+  pointer-events: none;
+}
+.hero .wrap { position: relative; z-index: 1; display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 48px; align-items: center; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font: 500 13px/1 var(--mono); color: var(--text2);
+  padding: 8px 12px; border: 1px dashed var(--stitch); border-radius: 999px;
+}
+.eyebrow .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--eye); box-shadow: 0 0 10px var(--eye); }
+h1 {
+  font-size: clamp(42px, 7vw, 76px); line-height: 1.02; letter-spacing: -0.035em;
+  margin: 22px 0 18px; font-weight: 800;
+}
+h1 .pocket {
+  background: linear-gradient(120deg, var(--amber), var(--coral));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.lede { font-size: clamp(17px, 2.1vw, 20px); color: var(--text2); max-width: 34em; margin: 0 0 30px; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 10px; padding: 13px 20px;
+  border-radius: 12px; font-weight: 600; font-size: 15px; border: 1px solid transparent;
+}
+.btn:hover { text-decoration: none; }
+.btn.primary { background: var(--primary); color: var(--on-primary); }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn.ghost { color: var(--text); border-color: var(--border); background: var(--surface); }
+.btn.ghost:hover { border-color: var(--muted); }
+.btn svg { width: 18px; height: 18px; }
+.platforms { margin-top: 22px; font: 13px/1.5 var(--mono); color: var(--muted); }
+
+/* the icon, peeking out of its pocket */
+.mascot { position: relative; display: grid; place-items: center; }
+.mascot .tile {
+  width: min(340px, 78vw); aspect-ratio: 1; border-radius: 23%;
+  box-shadow: 0 30px 80px -20px color-mix(in srgb, var(--coral) 55%, transparent), 0 0 0 1px color-mix(in srgb, var(--text) 8%, transparent);
+  transform: rotate(-4deg);
+  animation: bob 6s ease-in-out infinite;
+}
+@keyframes bob { 0%, 100% { transform: rotate(-4deg) translateY(0); } 50% { transform: rotate(-2deg) translateY(-10px); } }
+@media (prefers-reduced-motion: reduce) { .mascot .tile { animation: none; } }
+.chip {
+  position: absolute; font: 500 12.5px/1 var(--mono); padding: 9px 12px; border-radius: 10px;
+  background: var(--surface); border: 1px solid var(--border); color: var(--text2);
+  box-shadow: 0 10px 30px -12px rgba(0,0,0,.5); white-space: nowrap;
+}
+.chip b { color: var(--success); font-weight: 500; }
+.chip.c1 { top: 8%; left: -4%; }
+.chip.c2 { bottom: 12%; right: -6%; }
+.chip.c3 { bottom: -2%; left: 6%; }
+
+/* stitched divider */
+.stitch {
+  height: 0; border: 0; border-top: 3px dashed var(--stitch); opacity: .55;
+  margin: 0; width: 100%;
+}
+
+section { padding: 88px 0; }
+.kicker { font: 500 13px/1 var(--mono); color: var(--coral); letter-spacing: .06em; text-transform: uppercase; }
+h2 { font-size: clamp(30px, 4.2vw, 44px); letter-spacing: -0.025em; line-height: 1.1; margin: 14px 0 14px; }
+.sub { color: var(--text2); max-width: 40em; margin: 0 0 44px; font-size: 17px; }
+
+/* feature grid: denim pockets */
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.card {
+  position: relative; padding: 26px 24px 24px; border-radius: 18px;
+  background: var(--surface); border: 1px solid var(--border);
+}
+.card::after {
+  content: ""; position: absolute; inset: 7px; border: 1.5px dashed color-mix(in srgb, var(--stitch) 45%, transparent);
+  border-radius: 13px; pointer-events: none;
+}
+.card .ico {
+  width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; margin-bottom: 16px;
+  background: color-mix(in srgb, var(--primary) 16%, var(--surface)); color: var(--primary);
+}
+.card .ico svg { width: 22px; height: 22px; }
+.card h3 { margin: 0 0 8px; font-size: 18px; letter-spacing: -0.01em; }
+.card p { margin: 0; color: var(--text2); font-size: 15px; }
+.card.wide { grid-column: span 2; }
+.card.denim {
+  background: linear-gradient(160deg, var(--denim), var(--denim-dark));
+  border-color: transparent; color: #f4f6ff;
+}
+.card.denim p { color: #d7def5; }
+.card.denim .ico { background: rgba(255,255,255,.12); color: var(--eye); }
+.card.denim::after { border-color: color-mix(in srgb, #ffc46e 75%, transparent); }
+
+/* providers ticker */
+.ticker {
+  margin-top: 26px; overflow: hidden; border-block: 1px solid var(--border);
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+.ticker ul {
+  display: flex; gap: 34px; width: max-content; margin: 0; padding: 16px 0; list-style: none;
+  font: 14px/1 var(--mono); color: var(--muted); animation: slide 50s linear infinite;
+}
+.ticker li::before { content: "\25CF"; color: var(--primary); margin-right: 10px; font-size: 9px; vertical-align: 2px; }
+@keyframes slide { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .ticker ul { animation: none; flex-wrap: wrap; width: auto; } }
+
+/* screenshots */
+.shots { background: var(--sidebar); border-block: 1px solid var(--border); }
+.phones { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; margin-bottom: 30px; }
+.phone {
+  margin: 0; border-radius: 28px; padding: 8px; background: #1a1c22;
+  box-shadow: 0 0 0 1px #2b2e36, 0 24px 50px -24px rgba(0,0,0,.6);
+}
+.phone img { border-radius: 21px; width: 100%; height: auto; }
+.tablets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.tablet {
+  margin: 0; border-radius: 20px; padding: 9px; background: #1a1c22;
+  box-shadow: 0 0 0 1px #2b2e36, 0 24px 50px -24px rgba(0,0,0,.6);
+}
+.tablet img { border-radius: 12px; width: 100%; height: auto; }
+figcaption { font-size: 13px; color: var(--muted); text-align: center; padding: 10px 4px 2px; }
+
+/* privacy strip */
+.private { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+.term {
+  border-radius: 16px; background: #0a0b0e; border: 1px solid #24272e; overflow: hidden;
+  font: 13.5px/1.75 var(--mono); color: #b4b9c3;
+}
+.term .top { display: flex; gap: 7px; padding: 12px 14px; border-bottom: 1px solid #1d2027; }
+.term .top i { width: 11px; height: 11px; border-radius: 50%; background: #33373f; }
+.term pre { margin: 0; padding: 18px 20px; white-space: pre-wrap; word-break: break-word; }
+.term .k { color: #7c83ff; } .term .g { color: #3ccf91; } .term .a { color: #ffbe5c; } .term .m { color: #565b66; }
+.list { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
+.list li { display: flex; gap: 12px; color: var(--text2); }
+.list li::before {
+  content: ""; flex: none; width: 18px; height: 18px; margin-top: 4px; border-radius: 6px;
+  border: 2px dashed var(--stitch);
+}
+.list b { color: var(--text); font-weight: 600; }
+
+/* download */
+.download .box {
+  position: relative; border-radius: 26px; padding: 52px 44px; overflow: hidden;
+  background: linear-gradient(135deg, var(--amber), var(--coral));
+  color: #1f1503;
+}
+.download .box::after {
+  content: ""; position: absolute; inset: 12px; border: 2px dashed rgba(40,66,128,.5); border-radius: 18px; pointer-events: none;
+}
+.download h2 { margin-top: 0; color: #1a1230; }
+.download .sub { color: #3a2410; margin-bottom: 30px; }
+.dl { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; position: relative; z-index: 1; }
+.dl a {
+  display: block; padding: 20px 20px 18px; border-radius: 16px; background: rgba(255,255,255,.55);
+  color: #1a1230; border: 1px solid rgba(26,18,48,.12);
+}
+.dl a:hover { background: rgba(255,255,255,.75); text-decoration: none; }
+.dl strong { display: block; font-size: 18px; margin-bottom: 4px; }
+.dl a > span { display: block; font-size: 14px; color: #4a3520; }
+.dl .tag { display: table; margin-top: 12px; font: 500 12px/1 var(--mono); padding: 6px 9px; border-radius: 7px; background: #284280; color: #fff; }
+
+footer { padding: 40px 0 56px; color: var(--muted); font-size: 14px; }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; }
+footer a { color: var(--text2); }
+
+@media (max-width: 960px) {
+  .hero .wrap { grid-template-columns: 1fr; }
+  .mascot { order: -1; margin-bottom: 10px; }
+  .mascot .tile { width: min(240px, 60vw); }
+  .grid { grid-template-columns: repeat(2, 1fr); }
+  .card.wide { grid-column: span 2; }
+  .phones { grid-template-columns: repeat(2, 1fr); }
+  .tablets { grid-template-columns: 1fr; }
+  .private { grid-template-columns: 1fr; }
+  .dl { grid-template-columns: 1fr; }
+}
+@media (max-width: 620px) {
+  .bar nav a:not(.gh) { display: none; }
+  .hero { padding-top: 48px; }
+  .grid { grid-template-columns: 1fr; }
+  .card.wide { grid-column: auto; }
+  section { padding: 64px 0; }
+  .phones { gap: 14px; }
+  .phone { border-radius: 20px; padding: 5px; }
+  .phone img { border-radius: 16px; }
+  .chip { font-size: 11.5px; padding: 7px 10px; }
+  .chip.c1 { left: 0; top: 4%; } .chip.c2 { right: 0; bottom: 8%; } .chip.c3 { display: none; }
+  .download .box { padding: 36px 22px; }
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="img/icon.png" alt="">Pocket Agent</a>
+    <nav>
+      <a href="#features">Features</a>
+      <a href="#screens">Screens</a>
+      <a href="#download">Download</a>
+      <a class="gh" href="https://github.com/xmhrnx/pocket-agent">Source</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow"><span class="dot"></span>Android · iPhone · iPad</span>
+        <h1>An AI agent that fits in your <span class="pocket">pocket</span>.</h1>
+        <p class="lede">Chat with models running on the device or in the cloud, hand multi-step tasks to agents,
+          and run deep research that reads dozens of sources and writes a cited report. Private by design,
+          native rendering, no webview.</p>
+        <div class="cta">
+          <a class="btn primary" href="https://github.com/xmhrnx/pocket-agent/releases/latest">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+            Download the latest release</a>
+          <a class="btn ghost" href="https://github.com/xmhrnx/pocket-agent">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg>
+            View the source</a>
+        </div>
+        <p class="platforms">Written in Go with Giode · one codebase for phones and tablets</p>
+      </div>
+      <div class="mascot" aria-hidden="true">
+        <img class="tile" src="img/icon.png" alt="">
+        <span class="chip c1">llama.cpp <b>● on device</b></span>
+        <span class="chip c2">plan <b>3 of 3 ✓</b></span>
+        <span class="chip c3">research · cited report</span>
+      </div>
+    </div>
+  </div>
+
+  <hr class="stitch">
+
+  <section id="features">
+    <div class="wrap">
+      <div class="kicker">What's in the pocket</div>
+      <h2>Chat, agents and research - on your terms.</h2>
+      <p class="sub">Run a model on the phone itself, bring your own keys for the cloud, or reach the
+        models on your own computer. Every conversation stays in the app's private storage.</p>
+
+      <div class="grid">
+        <div class="card wide denim">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M9 7h6M9 11h6M9 15h3"/></svg></div>
+          <h3>On-device inference</h3>
+          <p>llama.cpp on the phone, with Metal on iPhone and iPad. A curated catalog of GGUF models sized
+            for phones - Qwen3, Llama 3.2, Gemma 3, Phi-4 mini, SmolLM2 - with a fit rating for your RAM,
+            resumable downloads, Hugging Face search and GGUF import. Every llama.cpp sampler and cache
+            control is there when you want it.</p>
+        </div>
+        <div class="card">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a4.5 4.5 0 1 0-1.4-8.8A6 6 0 1 0 6 17.7"/><path d="M6 19h11.5"/></svg></div>
+          <h3>Cloud with your keys</h3>
+          <p>Anthropic, OpenAI, Gemini, xAI, Mistral, DeepSeek and many more, inference platforms like
+            OpenRouter and Groq, or any OpenAI-compatible endpoint.</p>
+        </div>
+        <div class="card">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="12" rx="3"/><path d="M12 7V4"/><circle cx="12" cy="3" r="1"/><path d="M9 13h.01M15 13h.01"/></svg></div>
+          <h3>Agents with a plan</h3>
+          <p>Five built-in agents plus your own. They keep a live plan checklist, use tools and write
+            deliverables to a workspace you can open and share.</p>
+        </div>
+        <div class="card">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/><path d="M8 11h6M11 8v6"/></svg></div>
+          <h3>Deep research</h3>
+          <p>Plans sub-questions, reads sources in parallel, reflects on gaps, then streams a report with
+            inline citations and a source list.</p>
+        </div>
+        <div class="card">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg></div>
+          <h3>Terminal</h3>
+          <p>SSH to your servers with a key bar for Esc, Tab, Ctrl and arrows. Android and desktops also
+            get a local shell. Agents can run commands - after asking.</p>
+        </div>
+        <div class="card">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 0 1-7.9 7.9l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 7.9-7.9z"/></svg></div>
+          <h3>Tools, MCP and skills</h3>
+          <p>Web search, page reading, a JavaScript sandbox, memory and more, with per-tool
+            <em>Allow once / Always / Deny</em>. Add MCP servers and SKILL.md skills.</p>
+        </div>
+        <div class="card wide">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/></svg></div>
+          <h3>Made for touch</h3>
+          <p>Voice input, photos and documents (PDF, Word, Excel, PowerPoint and more) extracted on the
+            device, streaming Markdown with visible thinking, swipe and long-press gestures, haptics, a
+            notification when a background reply finishes - in 25 languages, dark or light, with six accent colors.</p>
+        </div>
+      </div>
+
+      <div class="ticker" aria-label="Supported providers">
+        <ul>
+          <li>Anthropic</li><li>OpenAI</li><li>Google Gemini</li><li>xAI</li><li>Mistral</li><li>DeepSeek</li><li>Moonshot</li><li>Z.ai</li><li>Alibaba Cloud</li><li>MiniMax</li><li>Perplexity</li><li>Cohere</li><li>OpenRouter</li><li>DeepInfra</li><li>Together</li><li>Groq</li><li>Fireworks</li><li>Cerebras</li><li>SambaNova</li><li>Hugging Face</li><li>NVIDIA NIM</li><li>Novita</li><li>Hyperbolic</li><li>Vercel AI Gateway</li><li>Ollama</li><li>LM Studio</li><li>llama.cpp server</li><li>vLLM</li>
+          <li aria-hidden="true">Anthropic</li><li aria-hidden="true">OpenAI</li><li aria-hidden="true">Google Gemini</li><li aria-hidden="true">xAI</li><li aria-hidden="true">Mistral</li><li aria-hidden="true">DeepSeek</li><li aria-hidden="true">Moonshot</li><li aria-hidden="true">Z.ai</li><li aria-hidden="true">Alibaba Cloud</li><li aria-hidden="true">MiniMax</li><li aria-hidden="true">Perplexity</li><li aria-hidden="true">Cohere</li><li aria-hidden="true">OpenRouter</li><li aria-hidden="true">DeepInfra</li><li aria-hidden="true">Together</li><li aria-hidden="true">Groq</li><li aria-hidden="true">Fireworks</li><li aria-hidden="true">Cerebras</li><li aria-hidden="true">SambaNova</li><li aria-hidden="true">Hugging Face</li><li aria-hidden="true">NVIDIA NIM</li><li aria-hidden="true">Novita</li><li aria-hidden="true">Hyperbolic</li><li aria-hidden="true">Vercel AI Gateway</li><li aria-hidden="true">Ollama</li><li aria-hidden="true">LM Studio</li><li aria-hidden="true">llama.cpp server</li><li aria-hidden="true">vLLM</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="screens" class="shots">
+    <div class="wrap">
+      <div class="kicker">Have a look</div>
+      <h2>A drawer on phones, an inspector on iPads.</h2>
+      <p class="sub">The layout adapts: a drawer on phones, a persistent sidebar on tablets, and sidebar plus
+        inspector - plan, workspace files, sources - on wide iPads.</p>
+      <div class="phones">
+        <figure class="phone"><img src="img/phone-home.png" width="400" height="860" loading="lazy" alt="New chat on a phone"><figcaption>New chat</figcaption></figure>
+        <figure class="phone"><img src="img/phone-chat.png" width="400" height="860" loading="lazy" alt="A reply with code and lists"><figcaption>Markdown replies</figcaption></figure>
+        <figure class="phone"><img src="img/phone-models.png" width="400" height="860" loading="lazy" alt="Model picker sheet"><figcaption>Model picker</figcaption></figure>
+        <figure class="phone"><img src="img/phone-drawer.png" width="400" height="860" loading="lazy" alt="Conversation drawer"><figcaption>Conversations</figcaption></figure>
+      </div>
+      <div class="tablets">
+        <figure class="tablet"><img src="img/ipad-agent.png" width="1366" height="1024" loading="lazy" alt="Agent run on iPad with the inspector"><figcaption>An agent run with the inspector</figcaption></figure>
+        <figure class="tablet"><img src="img/ipad-research.png" width="1366" height="1024" loading="lazy" alt="Deep research in progress on iPad"><figcaption>Deep research in progress</figcaption></figure>
+        <figure class="tablet"><img src="img/ipad-home.png" width="1366" height="1024" loading="lazy" alt="Home screen on iPad"><figcaption>Home on iPad</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="private">
+    <div class="wrap private">
+      <div>
+        <div class="kicker">Stays in your pocket</div>
+        <h2>Your data doesn't leave unless you send it.</h2>
+        <ul class="list">
+          <li><span><b>Local storage.</b> Conversations, files and memory live in the app's private storage.</span></li>
+          <li><span><b>Keys in the vault.</b> API keys are kept in the Keychain or the Android Keystore.</span></li>
+          <li><span><b>Only where you point it.</b> Messages go only to the provider you pick - or nowhere, with an on-device model.</span></li>
+          <li><span><b>You approve the tools.</b> Allow once, always allow or deny, per tool.</span></li>
+        </ul>
+      </div>
+      <div class="term" aria-hidden="true">
+        <div class="top"><i></i><i></i><i></i></div>
+<pre><span class="m"># a deep research run, step by step</span>
+<span class="k">plan</span>     5 sub-questions
+<span class="k">search</span>   "solid-state battery outlook"
+<span class="k">read</span>     sources in parallel <span class="g">✓</span>
+<span class="k">reflect</span>  gaps found → follow-up round
+<span class="k">write</span>    report with inline citations <span class="a">[1][2]</span>
+<span class="g">done</span>     cited report + source list</pre>
+      </div>
+    </div>
+  </section>
+
+  <section id="download" class="download">
+    <div class="wrap">
+      <div class="box">
+        <h2>Get Pocket Agent</h2>
+        <p class="sub">Builds are attached to each GitHub release.</p>
+        <div class="dl">
+          <a href="https://github.com/xmhrnx/pocket-agent/releases/latest">
+            <strong>Android</strong>
+            <span>APK for arm64 phones and tablets, Android 9 and later. The app downloads the on-device engine and its updates itself.</span>
+            <span class="tag">.apk</span>
+          </a>
+          <a href="https://github.com/xmhrnx/pocket-agent/releases/latest">
+            <strong>iPhone &amp; iPad</strong>
+            <span>One universal app with the on-device engine built in, iOS 15 and later.</span>
+            <span class="tag">.ipa</span>
+          </a>
+          <a href="https://github.com/xmhrnx/pocket-agent">
+            <strong>Build it yourself</strong>
+            <span>Go and the Giode CLI. <span class="mono">make dev</span> runs it on a desktop with an offline demo provider.</span>
+            <span class="tag">source</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Pocket Agent · built with <a href="https://github.com/xmhrnx/giode">Giode</a> and Go</span>
+    <span><a href="https://github.com/xmhrnx/pocket-agent">Source on GitHub</a> · <a href="https://github.com/xmhrnx/pocket-agent/releases">Releases</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
