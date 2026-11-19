@@ -250,6 +250,18 @@ figcaption { font-size: 13px; color: var(--muted); text-align: center; padding: 
 .dl a > span { display: block; font-size: 14px; color: #4a3520; }
 .dl .tag { display: table; margin-top: 12px; font: 500 12px/1 var(--mono); padding: 6px 9px; border-radius: 7px; background: #284280; color: #fff; }
 
+/* privacy policy */
+.policy-head { max-width: 46em; }
+.policy-head .sub { margin-bottom: 8px; }
+.policy-meta { font: 13px/1.5 var(--mono); color: var(--muted); margin: 0 0 40px; }
+.policy { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+.policy .card h3 { margin-bottom: 10px; }
+.policy .card p, .policy .card li { color: var(--text2); font-size: 15px; }
+.policy .card p + p, .policy .card ul + p { margin-top: 12px; }
+.policy .card ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.policy .card b { color: var(--text); font-weight: 600; }
+.policy .card.wide { grid-column: span 2; }
+
 footer { padding: 40px 0 56px; color: var(--muted); font-size: 14px; }
 footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; }
 footer a { color: var(--text2); }
@@ -264,6 +276,8 @@ footer a { color: var(--text2); }
   .tablets { grid-template-columns: 1fr; }
   .private { grid-template-columns: 1fr; }
   .dl { grid-template-columns: 1fr; }
+  .policy { grid-template-columns: 1fr; }
+  .policy .card.wide { grid-column: auto; }
 }
 @media (max-width: 620px) {
   .bar nav a:not(.gh) { display: none; }
@@ -419,6 +433,7 @@ footer a { color: var(--text2); }
           <li><span><b>Only where you point it.</b> Messages go only to the provider you pick - or nowhere, with an on-device model.</span></li>
           <li><span><b>You approve the tools.</b> Allow once, always allow or deny, per tool.</span></li>
         </ul>
+        <p class="sub" style="margin:24px 0 0;font-size:15px"><a href="#privacy">Read the privacy policy</a></p>
       </div>
       <div class="term" aria-hidden="true">
         <div class="top"><i></i><i></i><i></i></div>
@@ -458,12 +473,70 @@ footer a { color: var(--text2); }
       </div>
     </div>
   </section>
+  <section id="privacy">
+    <div class="wrap">
+      <div class="policy-head">
+        <div class="kicker">Privacy policy</div>
+        <h2>What Pocket Agent does with your data.</h2>
+        <p class="sub">Pocket Agent has no accounts, no ads, no analytics and no tracking. Its developer runs no
+          server for it and receives nothing you type, say or attach. This policy covers the app on Android,
+          iPhone and iPad, from Google Play, the App Store or GitHub.</p>
+        <p class="policy-meta">Last updated 19 November 2026</p>
+      </div>
+      <div class="policy">
+        <div class="card">
+          <h3>Stored on your device</h3>
+          <p>Conversations, attachments, agent workspaces, long-term memory, settings, skills, downloaded
+            models and the SSH key the app creates are kept in the app's private storage. API keys and
+            passwords are kept in the iOS Keychain or the Android Keystore. Deleting a conversation or the
+            app removes them; nothing is backed up to the developer.</p>
+        </div>
+        <div class="card">
+          <h3>Sent where you point it</h3>
+          <p>With an on-device model, your messages never leave the device. With a cloud or network model,
+            the conversation and its attachments go directly from your device to the provider you chose
+            (Anthropic, OpenAI, Google, OpenRouter, your own Ollama server, ...), with your own API key.
+            That provider's privacy policy applies to what it receives.</p>
+        </div>
+        <div class="card wide">
+          <h3>Other connections the app makes</h3>
+          <ul>
+            <li><b>Web search and page reading</b>, when a model uses those tools: the search query goes to
+              DuckDuckGo, or to Brave, Tavily or your SearXNG server if you choose one; pages are fetched from
+              their own sites.</li>
+            <li><b>Models</b>: the catalog, Hugging Face search and model downloads come from Hugging Face.</li>
+            <li><b>On-device engine</b>: the Android app from GitHub downloads the engine and checks for updates
+              from this project's GitHub releases at launch. The App Store and Google Play apps have it
+              built in.</li>
+            <li><b>Skills, MCP servers and SSH hosts</b> you add are contacted only to do what you asked.</li>
+            <li><b>Dictation</b> uses the system speech recognizer (Apple's or Google's), which may process the
+              audio on their servers under their policies. The app keeps no recordings.</li>
+          </ul>
+          <p>These requests carry only what they need (a query, a URL, a file name) and no identifier from the
+            app.</p>
+        </div>
+        <div class="card">
+          <h3>Permissions</h3>
+          <p><b>Microphone</b> and <b>speech recognition</b>: dictation, only after you tap the mic button and until it stops.
+            <b>Camera</b>: a photo you take to attach (on Android through the system camera app).
+            <b>Notifications</b>: a reply finished in the background, or an agent waits for your approval.
+            Each is asked for when first needed and can be turned off in system settings.</p>
+        </div>
+        <div class="card">
+          <h3>Children, changes and contact</h3>
+          <p>Pocket Agent isn't directed at children under 13. If this policy changes, the new version is
+            published on this page with a new date. Questions: open an issue on
+            <a href="https://github.com/xmhrnx/pocket-agent/issues">GitHub</a>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
 
 <footer>
   <div class="wrap">
     <span>Pocket Agent · built with <a href="https://github.com/xmhrnx/giode">Giode</a> and Go</span>
-    <span><a href="https://github.com/xmhrnx/pocket-agent">Source on GitHub</a> · <a href="https://github.com/xmhrnx/pocket-agent/releases">Releases</a></span>
+    <span><a href="https://github.com/xmhrnx/pocket-agent">Source on GitHub</a> · <a href="https://github.com/xmhrnx/pocket-agent/releases">Releases</a> · <a href="#privacy">Privacy policy</a></span>
   </div>
 </footer>
 
