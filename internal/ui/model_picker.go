@@ -5,12 +5,12 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/xmhrnx/giode"
 	"github.com/mehran9675/pocket-agent/internal/llm"
 	"github.com/mehran9675/pocket-agent/internal/store"
 	"github.com/mehran9675/pocket-agent/internal/tools"
 	"github.com/mehran9675/pocket-agent/internal/ui/theme"
 	"github.com/mehran9675/pocket-agent/internal/ui/widgets"
+	"github.com/xmhrnx/giode"
 )
 
 // openModelSheet lets the user pick the model for this chat.

@@ -1,11 +1,11 @@
 package ui
 
 import (
-	"github.com/xmhrnx/giode"
-	"github.com/xmhrnx/giode/components/swipeable"
 	"github.com/mehran9675/pocket-agent/internal/store"
 	"github.com/mehran9675/pocket-agent/internal/ui/theme"
 	"github.com/mehran9675/pocket-agent/internal/ui/widgets"
+	"github.com/xmhrnx/giode"
+	"github.com/xmhrnx/giode/components/swipeable"
 )
 
 func (s *sidebarView) convRow(c *store.Conversation) widgets.El {

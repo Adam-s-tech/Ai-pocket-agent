@@ -6,10 +6,10 @@ import (
 	"io"
 	"os"
 
-	"github.com/xmhrnx/giode"
 	"github.com/mehran9675/pocket-agent/internal/docs"
 	"github.com/mehran9675/pocket-agent/internal/store"
 	"github.com/mehran9675/pocket-agent/internal/tools"
+	"github.com/xmhrnx/giode"
 )
 
 // attachmentTexts returns the documents attached to c.

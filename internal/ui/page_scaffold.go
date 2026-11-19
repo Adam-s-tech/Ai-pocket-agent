@@ -1,9 +1,9 @@
 package ui
 
 import (
-	"github.com/xmhrnx/giode"
 	"github.com/mehran9675/pocket-agent/internal/ui/theme"
 	"github.com/mehran9675/pocket-agent/internal/ui/widgets"
+	"github.com/xmhrnx/giode"
 )
 
 // pageScaffold is a titled page with a back button and scrolling body.

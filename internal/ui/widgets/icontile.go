@@ -1,9 +1,9 @@
 package widgets
 
 import (
+	"github.com/mehran9675/pocket-agent/internal/ui/theme"
 	"github.com/xmhrnx/giode"
 	pr "github.com/xmhrnx/giode/styles/properties"
-	"github.com/mehran9675/pocket-agent/internal/ui/theme"
 )
 
 // IconTile is an icon on a tinted rounded square.

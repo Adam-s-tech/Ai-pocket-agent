@@ -3,8 +3,8 @@ package ui
 import (
 	"strings"
 
-	"github.com/xmhrnx/giode"
 	"github.com/mehran9675/pocket-agent/internal/store"
+	"github.com/xmhrnx/giode"
 )
 
 // ShareReceived starts a new chat with what another app shared - text,

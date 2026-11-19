@@ -5,12 +5,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/xmhrnx/giode"
 	"github.com/mehran9675/pocket-agent/internal/local"
 	"github.com/mehran9675/pocket-agent/internal/store"
 	"github.com/mehran9675/pocket-agent/internal/tools"
 	"github.com/mehran9675/pocket-agent/internal/ui/theme"
 	"github.com/mehran9675/pocket-agent/internal/ui/widgets"
+	"github.com/xmhrnx/giode"
 )
 
 func (a *App) libraryPage(compact bool) widgets.El {

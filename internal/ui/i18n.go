@@ -1,9 +1,9 @@
 package ui
 
 import (
-	"github.com/xmhrnx/giode/i18n"
 	"github.com/mehran9675/pocket-agent/internal/store"
 	"github.com/mehran9675/pocket-agent/internal/tools"
+	"github.com/xmhrnx/giode/i18n"
 )
 
 // tr translates UI text. The English text is the key, so English needs

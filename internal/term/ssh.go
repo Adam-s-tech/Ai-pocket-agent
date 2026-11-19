@@ -205,7 +205,7 @@ func DialSSH(ctx context.Context, h Host, known *KnownHosts, trust TrustFunc, co
 
 func (s *sshSession) Read(p []byte) (int, error)  { return s.out.Read(p) }
 func (s *sshSession) Write(p []byte) (int, error) { return s.stdin.Write(p) }
-func (s *sshSession) Resize(cols, rows int) error  { return s.sess.WindowChange(rows, cols) }
+func (s *sshSession) Resize(cols, rows int) error { return s.sess.WindowChange(rows, cols) }
 func (s *sshSession) Close() error {
 	_ = s.sess.Close()
 	return s.client.Close()

@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/xmhrnx/giode"
 	"github.com/mehran9675/pocket-agent/internal/store"
 	"github.com/mehran9675/pocket-agent/internal/ui/theme"
 	"github.com/mehran9675/pocket-agent/internal/ui/widgets"
+	"github.com/xmhrnx/giode"
 )
 
 // reasoningRows adds a thinking block's rows: its header (with the

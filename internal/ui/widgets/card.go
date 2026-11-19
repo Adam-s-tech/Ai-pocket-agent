@@ -1,8 +1,8 @@
 package widgets
 
 import (
-	"github.com/xmhrnx/giode"
 	"github.com/mehran9675/pocket-agent/internal/ui/theme"
+	"github.com/xmhrnx/giode"
 )
 
 // Card is a bordered surface.

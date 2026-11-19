@@ -3,8 +3,8 @@ package ui
 import (
 	"strings"
 
-	"github.com/xmhrnx/giode"
 	"github.com/mehran9675/pocket-agent/internal/store"
+	"github.com/xmhrnx/giode"
 )
 
 // Backgrounded records that the app left the screen. Called from

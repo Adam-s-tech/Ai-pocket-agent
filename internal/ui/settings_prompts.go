@@ -3,11 +3,11 @@ package ui
 import (
 	"strings"
 
-	"github.com/xmhrnx/giode"
-	"github.com/xmhrnx/giode/components/input"
 	"github.com/mehran9675/pocket-agent/internal/agent"
 	"github.com/mehran9675/pocket-agent/internal/ui/theme"
 	"github.com/mehran9675/pocket-agent/internal/ui/widgets"
+	"github.com/xmhrnx/giode"
+	"github.com/xmhrnx/giode/components/input"
 )
 
 func (a *App) promptsBody() widgets.El {

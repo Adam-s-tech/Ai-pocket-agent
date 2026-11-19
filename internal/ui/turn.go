@@ -7,11 +7,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/xmhrnx/giode"
 	"github.com/mehran9675/pocket-agent/internal/agent"
 	"github.com/mehran9675/pocket-agent/internal/llm"
 	"github.com/mehran9675/pocket-agent/internal/store"
 	"github.com/mehran9675/pocket-agent/internal/tools"
+	"github.com/xmhrnx/giode"
 )
 
 // send starts a turn with the composer's content.

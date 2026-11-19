@@ -8,14 +8,14 @@ import (
 	"os"
 	"strings"
 
-	"github.com/xmhrnx/giode"
-	"github.com/xmhrnx/giode/components/input"
-	"github.com/xmhrnx/giode/components/scroll"
-	pr "github.com/xmhrnx/giode/styles/properties"
 	"github.com/mehran9675/pocket-agent/internal/docs"
 	"github.com/mehran9675/pocket-agent/internal/store"
 	"github.com/mehran9675/pocket-agent/internal/ui/theme"
 	"github.com/mehran9675/pocket-agent/internal/ui/widgets"
+	"github.com/xmhrnx/giode"
+	"github.com/xmhrnx/giode/components/input"
+	"github.com/xmhrnx/giode/components/scroll"
+	pr "github.com/xmhrnx/giode/styles/properties"
 )
 
 // pendingAttachment is a file being imported into the composer.

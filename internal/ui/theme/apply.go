@@ -1,8 +1,8 @@
 package theme
 
 import (
-	"github.com/xmhrnx/giode"
 	"github.com/mehran9675/pocket-agent/internal/store"
+	"github.com/xmhrnx/giode"
 )
 
 // SystemPrefersDark asks the platform for its color scheme, defaulting

@@ -3,8 +3,8 @@ package ui
 import (
 	"runtime"
 
-	"github.com/xmhrnx/giode"
 	"github.com/mehran9675/pocket-agent/internal/ui/widgets"
+	"github.com/xmhrnx/giode"
 )
 
 // openAttachSheet offers attachment sources.

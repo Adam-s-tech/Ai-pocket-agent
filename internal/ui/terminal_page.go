@@ -5,12 +5,12 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/xmhrnx/giode"
-	"github.com/xmhrnx/giode/components/input"
 	"github.com/mehran9675/pocket-agent/internal/store"
 	"github.com/mehran9675/pocket-agent/internal/term"
 	"github.com/mehran9675/pocket-agent/internal/ui/theme"
 	"github.com/mehran9675/pocket-agent/internal/ui/widgets"
+	"github.com/xmhrnx/giode"
+	"github.com/xmhrnx/giode/components/input"
 )
 
 // terminalPage lists open sessions, the local shell, saved SSH hosts and

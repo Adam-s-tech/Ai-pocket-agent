@@ -1,9 +1,9 @@
 package ui
 
 import (
-	"github.com/xmhrnx/giode"
 	"github.com/mehran9675/pocket-agent/internal/store"
 	"github.com/mehran9675/pocket-agent/internal/ui/widgets"
+	"github.com/xmhrnx/giode"
 )
 
 // toolGroup renders consecutive tool calls as a compact timeline.

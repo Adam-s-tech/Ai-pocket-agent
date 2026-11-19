@@ -3,8 +3,8 @@ package theme
 import (
 	"gioui.org/font"
 	"gioui.org/font/opentype"
-	"github.com/xmhrnx/giode"
 	"github.com/mehran9675/pocket-agent/assets"
+	"github.com/xmhrnx/giode"
 )
 
 // RegisterFonts loads the embedded fonts.

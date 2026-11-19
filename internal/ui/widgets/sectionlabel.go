@@ -3,8 +3,8 @@ package widgets
 import (
 	"strings"
 
-	"github.com/xmhrnx/giode"
 	"github.com/mehran9675/pocket-agent/internal/ui/theme"
+	"github.com/xmhrnx/giode"
 )
 
 // SectionLabel is a small caps heading above grouped content.

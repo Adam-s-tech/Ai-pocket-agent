@@ -3,11 +3,11 @@ package ui
 import (
 	"fmt"
 
-	"github.com/xmhrnx/giode"
 	"github.com/mehran9675/pocket-agent/internal/local"
 	"github.com/mehran9675/pocket-agent/internal/tools"
 	"github.com/mehran9675/pocket-agent/internal/ui/theme"
 	"github.com/mehran9675/pocket-agent/internal/ui/widgets"
+	"github.com/xmhrnx/giode"
 )
 
 func (a *App) catalogCard(m local.CatalogModel, dls map[string]local.Download) widgets.El {

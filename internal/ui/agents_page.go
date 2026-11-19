@@ -1,10 +1,10 @@
 package ui
 
 import (
-	"github.com/xmhrnx/giode"
 	"github.com/mehran9675/pocket-agent/internal/store"
 	"github.com/mehran9675/pocket-agent/internal/ui/theme"
 	"github.com/mehran9675/pocket-agent/internal/ui/widgets"
+	"github.com/xmhrnx/giode"
 )
 
 func (a *App) agentsPage(compact bool) widgets.El {
@@ -12,7 +12,7 @@ func (a *App) agentsPage(compact bool) widgets.El {
 		widgets.Button("agents/new", ifStr(compact, tr("New"), tr("New agent")), "plus", widgets.BtnPrimary, func() {
 			ag := &store.Agent{
 				ID: store.NewID(), Name: tr("New agent"), Icon: "bot", Color: agentColors[len(a.agents)%len(agentColors)],
-				Description: tr("Describe what this agent is for."),
+				Description:  tr("Describe what this agent is for."),
 				Instructions: tr("You are a capable autonomous agent. Plan with update_plan, use your tools, and finish with a clear summary."),
 				Tools:        []string{"update_plan", "web_search", "fetch_url", "run_javascript", "write_file", "read_file", "list_files"},
 			}

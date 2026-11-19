@@ -32,10 +32,10 @@ type Research struct {
 	Model    string
 	Question string
 	// Context is earlier conversation the question builds on.
-	Context  string
-	Depth    store.ResearchDepth
-	Search   tools.SearchConfig
-	Small    bool // small context window: read less, write tighter
+	Context string
+	Depth   store.ResearchDepth
+	Search  tools.SearchConfig
+	Small   bool // small context window: read less, write tighter
 	// Thinking sets how much a reasoning model thinks on each call.
 	Thinking llm.Thinking
 	Observer ResearchObserver

@@ -8,9 +8,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/xmhrnx/giode"
 	"github.com/mehran9675/pocket-agent/internal/llm"
 	"github.com/mehran9675/pocket-agent/internal/store"
+	"github.com/xmhrnx/giode"
 )
 
 // conversationMarkdown exports c.

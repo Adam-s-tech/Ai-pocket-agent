@@ -1,9 +1,9 @@
 package widgets
 
 import (
+	"github.com/mehran9675/pocket-agent/internal/ui/theme"
 	"github.com/xmhrnx/giode"
 	pr "github.com/xmhrnx/giode/styles/properties"
-	"github.com/mehran9675/pocket-agent/internal/ui/theme"
 )
 
 // LogoMark is the app's mark: a gradient tile with a spark.

@@ -3,10 +3,10 @@ package ui
 import (
 	"time"
 
-	"github.com/xmhrnx/giode"
 	"github.com/mehran9675/pocket-agent/internal/store"
 	"github.com/mehran9675/pocket-agent/internal/ui/theme"
 	"github.com/mehran9675/pocket-agent/internal/ui/widgets"
+	"github.com/xmhrnx/giode"
 )
 
 func (a *App) toolRow(c *store.Conversation, m *store.Message, t *store.ToolRun) widgets.El {

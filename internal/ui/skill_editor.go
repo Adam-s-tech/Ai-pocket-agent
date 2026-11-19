@@ -1,11 +1,11 @@
 package ui
 
 import (
-	"github.com/xmhrnx/giode"
-	"github.com/xmhrnx/giode/components/input"
 	"github.com/mehran9675/pocket-agent/internal/skills"
 	"github.com/mehran9675/pocket-agent/internal/ui/theme"
 	"github.com/mehran9675/pocket-agent/internal/ui/widgets"
+	"github.com/xmhrnx/giode"
+	"github.com/xmhrnx/giode/components/input"
 )
 
 // newSkillRoute is the skill page's name for a skill being created.

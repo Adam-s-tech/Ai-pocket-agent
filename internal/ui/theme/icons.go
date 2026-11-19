@@ -1,8 +1,8 @@
 package theme
 
 import (
-	"github.com/xmhrnx/giode"
 	"github.com/mehran9675/pocket-agent/assets"
+	"github.com/xmhrnx/giode"
 )
 
 // RegisterIcons loads the embedded icon set.
